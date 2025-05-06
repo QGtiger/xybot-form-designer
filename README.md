@@ -1,54 +1,205 @@
-# React + TypeScript + Vite
+# feat1
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+- 动画 就用 motion https://motion.dev/docs/react-animate-presence
 
-Currently, two official plugins are available:
+* 参考文献 https://github.com/QuarkGluonPlasma/react-course-code/blob/main/lowcode-editor/src/editor/components/Material/index.tsx
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 参考 Code https://lovable.dev/projects/b90bf2ec-3283-49f2-8fcc-f1e2b0f8ac1d
+- UI https://component-flow-designer.lovable.app/
 
-## Expanding the ESLint configuration
+- react-dnd 的使用逻辑
+  https://juejin.cn/book/7294082310658326565/section/7353923174821527606
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- 拖拽排序示例代码
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
+```tsx
+import { useCallback, useEffect, useRef, useState } from "react";
+import "./App2.css";
+import { useDrag, useDrop } from "react-dnd";
+
+interface CardItem {
+  id: number;
+  content: string;
+}
+
+interface CardProps {
+  data: CardItem;
+  index: number;
+  swapIndex: Function;
+}
+
+interface DragData {
+  id: number;
+  index: number;
+}
+
+function Card(props: CardProps) {
+  const { data, swapIndex, index } = props;
+
+  const ref = useRef(null);
+
+  const [{ dragging }, drag] = useDrag({
+    type: "card",
+    item: {
+      id: data.id,
+      index: index,
     },
-  },
-})
+    collect(monitor) {
+      return {
+        dragging: monitor.isDragging(),
+      };
+    },
+  });
+  const [, drop] = useDrop({
+    accept: "card",
+    hover(item: DragData) {
+      swapIndex(index, item.index);
+      item.index = index;
+    },
+    // drop(item: DragData) {
+    //     swapIndex(index, item.index)
+    // }
+  });
+
+  useEffect(() => {
+    drag(ref);
+    drop(ref);
+  }, []);
+
+  return (
+    <div ref={ref} className={dragging ? "card dragging" : "card"}>
+      {data.content}
+    </div>
+  );
+}
+
+function App() {
+  const [cardList, setCardList] = useState<CardItem[]>([
+    {
+      id: 0,
+      content: "000",
+    },
+    {
+      id: 1,
+      content: "111",
+    },
+    {
+      id: 2,
+      content: "222",
+    },
+    {
+      id: 3,
+      content: "333",
+    },
+    {
+      id: 4,
+      content: "444",
+    },
+  ]);
+
+  const swapIndex = useCallback((index1: number, index2: number) => {
+    const tmp = cardList[index1];
+    cardList[index1] = cardList[index2];
+    cardList[index2] = tmp;
+
+    setCardList([...cardList]);
+  }, []);
+
+  return (
+    <div className="card-list">
+      {cardList.map((item: CardItem, index) => (
+        <Card
+          data={item}
+          key={"card_" + item.id}
+          index={index}
+          swapIndex={swapIndex}
+        />
+      ))}
+    </div>
+  );
+}
+
+export default App;
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- 判断 hover 是在上半部分还是下半部分
+  你说得对，`react-dnd` 的 `useDrop` 默认的 `monitor.isOver()` 只能判断是否悬停在目标上。但我们可以借助 `monitor.getClientOffset()` 和目标元素的位置 `ref.getBoundingClientRect()` 来判断 **光标在目标元素的上半部分还是下半部分**，从而实现类似插入“上”或“下”的逻辑。
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+### ✅ 示例：判断拖拽悬停在上半部分或下半部分
+
+```tsx
+import { useRef, useState } from "react";
+import { useDrop } from "react-dnd";
+
+const DropTarget = ({ onDropAbove, onDropBelow, children }: any) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [hoverPosition, setHoverPosition] = useState<"top" | "bottom" | null>(
+    null
+  );
+
+  const [{ isOver }, drop] = useDrop(() => ({
+    accept: "list-item",
+    hover(item, monitor) {
+      if (!ref.current) return;
+
+      const clientOffset = monitor.getClientOffset();
+      const boundingRect = ref.current.getBoundingClientRect();
+      const hoverMiddleY = (boundingRect.bottom - boundingRect.top) / 2;
+      const mouseY = clientOffset!.y - boundingRect.top;
+
+      if (mouseY < hoverMiddleY) {
+        setHoverPosition("top");
+      } else {
+        setHoverPosition("bottom");
+      }
+    },
+    drop(item, monitor) {
+      if (hoverPosition === "top") {
+        onDropAbove(item);
+      } else if (hoverPosition === "bottom") {
+        onDropBelow(item);
+      }
+      setHoverPosition(null);
+    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+    }),
+  }));
+
+  drop(ref);
+
+  return (
+    <div
+      ref={ref}
+      className={`p-4 border ${
+        isOver
+          ? hoverPosition === "top"
+            ? "border-t-4 border-blue-500"
+            : "border-b-4 border-blue-500"
+          : "border-gray-200"
+      }`}
+    >
+      {children}
+    </div>
+  );
+};
 ```
+
+---
+
+### ✅ 用法示例：
+
+```tsx
+<DropTarget
+  onDropAbove={(item) => console.log("Drop above", item)}
+  onDropBelow={(item) => console.log("Drop below", item)}
+>
+  <div>我是一个可以接受拖拽的目标</div>
+</DropTarget>
+```
+
+---
+
+这个方式可以很灵活地让你实现**根据鼠标位置决定是添加到上面还是下面**。需要我帮你把这个集成进你已有的低代码表单中吗？

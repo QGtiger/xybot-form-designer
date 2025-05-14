@@ -1,24 +1,50 @@
-import { Allotment } from "allotment";
 import Material from "./components/Material";
 import EditArea from "./components/EditArea";
 import Setting from "./components/Setting";
 
-import "allotment/dist/style.css";
+import Header from "./components/Header";
 
-export default function FormDesignerEditor() {
+import { Allotment } from "allotment";
+import "allotment/dist/style.css";
+import { useEffect } from "react";
+import { EditorModel, EditorModelProps } from "./model";
+
+function FormexDesigner() {
+  useEffect(() => {
+    const ele = document.getElementById("allotment-container");
+    if (ele) {
+      setTimeout(() => {
+        ele.style.opacity = "1";
+      }, 50);
+    }
+  }, []);
+
   return (
     <div className="h-[100vh] w-[100vw] flex flex-col">
-      <Allotment defaultSizes={[100]}>
-        <Allotment.Pane preferredSize={240} maxSize={300} minSize={200}>
+      <Header />
+      <Allotment
+        defaultSizes={[100]}
+        id="allotment-container"
+        className="opacity-0"
+      >
+        <Allotment.Pane preferredSize={280} maxSize={360} minSize={200}>
           <Material />
         </Allotment.Pane>
-        <Allotment.Pane>
+        <Allotment.Pane className="bg-[#e5e8ec]">
           <EditArea />
         </Allotment.Pane>
-        <Allotment.Pane preferredSize={300} maxSize={500} minSize={300}>
+        <Allotment.Pane preferredSize={300} maxSize={500} minSize={260}>
           <Setting />
         </Allotment.Pane>
       </Allotment>
     </div>
+  );
+}
+
+export default function FormDesignerEditor(props: EditorModelProps) {
+  return (
+    <EditorModel.Provider value={props}>
+      <FormexDesigner />
+    </EditorModel.Provider>
   );
 }

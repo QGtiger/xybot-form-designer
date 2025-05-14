@@ -1,23 +1,24 @@
-import { Tabs, TabsProps } from "antd";
-
-const items: TabsProps["items"] = [
-  {
-    key: "1",
-    label: "Tab 1",
-    children: "Content of Tab Pane 1",
-  },
-  {
-    key: "2",
-    label: "Tab 2",
-    children: "Content of Tab Pane 2",
-  },
-  {
-    key: "3",
-    label: "Tab 3",
-    children: "Content of Tab Pane 3",
-  },
-];
+import { AppstoreOutlined, BarsOutlined } from "@ant-design/icons";
+import { Segmented } from "antd";
+import { useState } from "react";
+import MaterialList from "./MaterialList";
 
 export default function Material() {
-  return <Tabs size="small" defaultActiveKey="1" items={items} />;
+  const [activeKey, setActionKey] = useState<"list" | "tree">("list");
+  return (
+    <div className="p-4 flex flex-col gap-4 h-full">
+      <Segmented
+        value={activeKey}
+        options={[
+          { label: "组件", value: "list", icon: <BarsOutlined /> },
+          { label: "大纲树", value: "tree", icon: <AppstoreOutlined /> },
+        ]}
+        onChange={setActionKey}
+        block
+      />
+      <div>
+        <MaterialList />
+      </div>
+    </div>
+  );
 }

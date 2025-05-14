@@ -1,4 +1,4 @@
-import { useMaterialList } from "../../stores/useMaterialStore";
+import { useMaterialList } from "@/stores/useMaterialStore";
 
 export default function MaterialList() {
   const list = useMaterialList();

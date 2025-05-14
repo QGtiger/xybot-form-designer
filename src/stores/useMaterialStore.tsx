@@ -1,4 +1,5 @@
 import { createFromIconfontCN } from "@ant-design/icons";
+import { Input, InputNumber, Select } from "antd";
 import { create } from "zustand";
 
 interface MaterialItem {
@@ -11,6 +12,7 @@ interface MaterialItem {
 
 interface MaterialState {
   materialList: MaterialItem[];
+  materialMap: Record<MaterialItem["code"], MaterialItem>;
 }
 
 const IconFont = createFromIconfontCN({
@@ -24,21 +26,21 @@ export const useMaterialStore = create<MaterialState>(() => {
       name: "输入框",
       desc: "输入框组件",
       icon: <IconFont type="icon-biaodanzujian-shurukuang" />,
-      dev: () => <div>Input Component</div>,
+      dev: Input,
     },
     {
       code: "inputNumber",
       name: "数字输入",
       desc: "数字输入框组件",
       icon: <IconFont type="icon-fuhao-shuzishurukuang" />,
-      dev: () => <div>Select Component</div>,
+      dev: InputNumber,
     },
     {
       code: "select",
       name: "下拉选择",
       desc: "单选下拉",
       icon: <IconFont type="icon-danxuanxiala" />,
-      dev: () => <div>Checkbox Component</div>,
+      dev: Select,
     },
     {
       code: "multiSelect",
@@ -65,10 +67,19 @@ export const useMaterialStore = create<MaterialState>(() => {
 
   return {
     materialList,
+    materialMap: materialList.reduce((acc, curr) => {
+      acc[curr.code] = curr;
+      return acc;
+    }, {} as MaterialState["materialMap"]),
   };
 });
 
 export function useMaterialList() {
   const { materialList } = useMaterialStore();
   return materialList;
+}
+
+export function useMaterialMap() {
+  const { materialMap } = useMaterialStore();
+  return materialMap;
 }

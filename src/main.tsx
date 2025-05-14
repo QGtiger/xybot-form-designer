@@ -4,8 +4,26 @@ import DndCard from "./pages/dndcard";
 import FormDesignerEditor from "./pages/editor";
 import { ConfigProvider } from "antd";
 
+const testSchema: FormexSchemaV1 = {
+  version: "1.0",
+  title: "表单标题",
+  subtitle: "表单副标题",
+  background:
+    "https://winrobot-pub-a-1302949341.cos.ap-shanghai.myqcloud.com/image/20250514202954/395c74ad8b4de6e1b7a38247700842aa.png",
+  formItems: [
+    {
+      materialCode: "input",
+      code: "22",
+      name: "你好",
+      desc: "222",
+      props: {},
+    },
+  ],
+  btnText: "提交",
+};
+
 createRoot(document.getElementById("root")!).render(
   <ConfigProvider theme={{ token: { colorPrimary: "#7f70f5" } }}>
-    <FormDesignerEditor />
+    <FormDesignerEditor initialSchema={testSchema} />
   </ConfigProvider>
 );

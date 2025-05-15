@@ -5,12 +5,20 @@ interface HoverMaskProps {
   componentId: string;
   containerClassName: string;
   portalClassName: string;
+
+  renderMask?: (props: {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+  }) => React.ReactNode;
 }
 
 export default function HoverMask({
   componentId,
   containerClassName,
   portalClassName,
+  renderMask,
 }: HoverMaskProps) {
   const [position, setPosition] = useState({
     left: 0,
@@ -45,21 +53,25 @@ export default function HoverMask({
   }, []);
 
   return createPortal(
-    <div
-      style={{
-        position: "absolute",
-        left: position.left,
-        top: position.top,
-        backgroundColor: "rgba(0, 0, 255, 0.1)",
-        border: "1px dashed blue",
-        pointerEvents: "none",
-        width: position.width,
-        height: position.height,
-        zIndex: 12,
-        borderRadius: 4,
-        boxSizing: "border-box",
-      }}
-    />,
+    renderMask ? (
+      renderMask(position)
+    ) : (
+      <div
+        style={{
+          position: "absolute",
+          left: position.left,
+          top: position.top,
+          backgroundColor: "rgba(0, 0, 255, 0.1)",
+          border: "1px dashed blue",
+          pointerEvents: "none",
+          width: position.width,
+          height: position.height,
+          zIndex: 12,
+          borderRadius: 2,
+          boxSizing: "border-box",
+        }}
+      />
+    ),
     ele
   );
 }

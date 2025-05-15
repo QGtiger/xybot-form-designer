@@ -1,27 +1,17 @@
-import useMaterialDrop from "@/pages/editor/hooks/useMaterialDrop";
-import { useMaterialMap } from "@/stores/useMaterialStore";
-import { useMount } from "ahooks";
+import { useMaterialMap, useMaterialStore } from "@/stores/useMaterialStore";
 import { Form, Typography } from "antd";
 import classNames from "classnames";
 import { MouseEventHandler, useRef, useState } from "react";
 import HoverMask from "./HoverMask";
 
 export default function PreviewDevFormex({ schema }: { schema: FormexSchema }) {
+  const { overComponentId, overPlacement } = useMaterialStore();
   const materialMap = useMaterialMap();
   const { title, subtitle, background, formItems } = schema;
 
   const formexDomRef = useRef<HTMLDivElement>(null);
 
   const [hoverComponentId, setHoverComponetId] = useState("");
-
-  const { drop, isOver } = useMaterialDrop({
-    id: "preview-formex",
-    accept: Object.keys(materialMap),
-  });
-
-  useMount(() => {
-    drop(formexDomRef);
-  });
 
   const handleMouseOver: MouseEventHandler = (e) => {
     const path = e.nativeEvent.composedPath();
@@ -64,12 +54,8 @@ export default function PreviewDevFormex({ schema }: { schema: FormexSchema }) {
             <Typography.Text type="secondary">{subtitle}</Typography.Text>
           </div>
         </div>
-        <div
-          className={classNames("mt-4", {
-            "ring-1 rounded-sm": isOver,
-          })}
-          ref={formexDomRef}
-        >
+
+        <div className={classNames("mt-4")} ref={formexDomRef}>
           <Form colon={false} layout="vertical">
             {formItems.map((it) => {
               const { code, props, id } = it;
@@ -93,6 +79,27 @@ export default function PreviewDevFormex({ schema }: { schema: FormexSchema }) {
         />
       )}
       <div className="hover-mask"></div>
+
+      {overComponentId && (
+        <HoverMask
+          componentId={overComponentId}
+          containerClassName="edit-area"
+          portalClassName="over-line"
+          renderMask={(props) => {
+            return (
+              <div
+                className=" absolute h-[2px] bg-blue-500"
+                style={{
+                  left: props.left,
+                  top: props.top + (overPlacement === "top" ? 0 : props.height),
+                  width: props.width,
+                }}
+              ></div>
+            );
+          }}
+        />
+      )}
+      <div className="over-line"></div>
     </div>
   );
 }

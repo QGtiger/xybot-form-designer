@@ -19,6 +19,14 @@ const testSchema: FormexSchemaV1 = {
         placeholder: "请输入姓名",
       },
     },
+    {
+      code: "input",
+      id: "223",
+      props: {
+        name: "姓名22",
+        placeholder: "请输入姓名",
+      },
+    },
   ],
   btnText: "提交",
 };

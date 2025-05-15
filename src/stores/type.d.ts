@@ -2,9 +2,11 @@ interface MaterialItem {
   code: string;
   name: string;
   desc: string;
-  dev: React.FC<MaterialItemProps>;
   icon?: React.ReactNode;
   defaultProps?: Record<string, any>;
+
+  dev: React.FC<MaterialItemProps>;
+  prod: React.FC<MaterialItemProps>;
 }
 
 interface MaterialItemProps {

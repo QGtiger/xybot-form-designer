@@ -1,13 +1,16 @@
 import { PropsWithChildren, useEffect, useRef } from "react";
-import { useMaterialStore } from "./useMaterialStore";
+import { useMaterialStore } from "../useMaterialStore";
 import { useDrop } from "react-dnd";
 import { useMount } from "ahooks";
+import { useSchemaStore } from "../useSchemaStore";
 
 export default function MaterialWrapper(
   props: PropsWithChildren<MaterialItemProps>
 ) {
-  const { setOverComponentId, setOverComponentPlacement, materialKeys } =
-    useMaterialStore();
+  const { materialKeys } = useMaterialStore();
+
+  const { setOverComponentId, setOverComponentPlacement, insertFormItem } =
+    useSchemaStore();
   const ref = useRef<HTMLDivElement>(null);
   const [{ isOver }, drop] = useDrop({
     accept: materialKeys,
@@ -17,8 +20,7 @@ export default function MaterialWrapper(
       if (monitor.didDrop()) {
         return;
       }
-
-      console.log("item", item);
+      insertFormItem(item);
     },
     hover(item: any, monitor) {
       if (!ref.current) return;

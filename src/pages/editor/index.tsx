@@ -7,11 +7,23 @@ import Header from "./components/Header";
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
 import { useEffect } from "react";
-import { EditorModel, EditorModelProps } from "./model";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { useSchemaStore } from "@/stores/useSchemaStore";
+import { ConfigProvider } from "antd";
 
-function FormexDesigner() {
+import zhCN from "antd/locale/zh_CN";
+
+export default function FormexDesigner(props: {
+  initialSchema?: FormexSchema;
+}) {
+  const { initialSchema } = props;
+  const { setSchema } = useSchemaStore();
+
+  useEffect(() => {
+    initialSchema && setSchema(initialSchema);
+  }, []);
+
   useEffect(() => {
     const ele = document.getElementById("allotment-container");
     if (ele) {
@@ -22,33 +34,27 @@ function FormexDesigner() {
   }, []);
 
   return (
-    <div className="h-[100vh] w-[100vw] flex flex-col">
-      <Header />
-      <Allotment
-        defaultSizes={[100]}
-        id="allotment-container"
-        className="opacity-0"
-      >
-        <Allotment.Pane preferredSize={280} maxSize={360} minSize={200}>
-          <Material />
-        </Allotment.Pane>
-        <Allotment.Pane className="bg-[#e5e8ec]">
-          <EditArea />
-        </Allotment.Pane>
-        <Allotment.Pane preferredSize={300} maxSize={500} minSize={260}>
-          <Setting />
-        </Allotment.Pane>
-      </Allotment>
-    </div>
-  );
-}
-
-export default function FormDesignerEditor(props: EditorModelProps) {
-  return (
-    <DndProvider backend={HTML5Backend}>
-      <EditorModel.Provider value={props}>
-        <FormexDesigner />
-      </EditorModel.Provider>
-    </DndProvider>
+    <ConfigProvider locale={zhCN}>
+      <DndProvider backend={HTML5Backend}>
+        <div className="h-[100vh] w-[100vw] flex flex-col">
+          <Header />
+          <Allotment
+            defaultSizes={[100]}
+            id="allotment-container"
+            className="opacity-0"
+          >
+            <Allotment.Pane preferredSize={280} maxSize={360} minSize={200}>
+              <Material />
+            </Allotment.Pane>
+            <Allotment.Pane className="bg-[#e5e8ec]">
+              <EditArea />
+            </Allotment.Pane>
+            <Allotment.Pane preferredSize={300} maxSize={500} minSize={260}>
+              <Setting />
+            </Allotment.Pane>
+          </Allotment>
+        </div>
+      </DndProvider>
+    </ConfigProvider>
   );
 }

@@ -42,7 +42,7 @@ export default function HoverMask({
 
     setPosition({
       top: top - containerTop + container.scrollTop,
-      left: left - containerLeft + container.scrollTop,
+      left: left - containerLeft,
       width,
       height,
     });

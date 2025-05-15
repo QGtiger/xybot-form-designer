@@ -1,11 +1,13 @@
-import { useMaterialMap, useMaterialStore } from "@/stores/useMaterialStore";
-import { Form, Typography } from "antd";
+import { useMaterialMap } from "@/stores/useMaterialStore";
+import { Button, Form, Typography } from "antd";
 import classNames from "classnames";
 import { MouseEventHandler, useRef, useState } from "react";
 import HoverMask from "./HoverMask";
+import { useSchemaStore } from "@/stores/useSchemaStore";
 
-export default function PreviewDevFormex({ schema }: { schema: FormexSchema }) {
-  const { overComponentId, overPlacement } = useMaterialStore();
+export default function PreviewDevFormex() {
+  const { overComponentId, overPlacement } = useSchemaStore();
+  const { schema } = useSchemaStore();
   const materialMap = useMaterialMap();
   const { title, subtitle, background, formItems } = schema;
 
@@ -31,7 +33,7 @@ export default function PreviewDevFormex({ schema }: { schema: FormexSchema }) {
   return (
     <div
       onMouseOver={handleMouseOver}
-      className=" edit-area relative w-full h-full bg-white md:bg-gradient-to-b md:from-indigo-200 md:via-cyan-50 md:to-white "
+      className=" overflow-auto edit-area relative w-full h-full bg-white md:bg-gradient-to-b md:from-indigo-200 md:via-cyan-50 md:to-white "
     >
       <div
         className="h-[180px]"
@@ -69,8 +71,14 @@ export default function PreviewDevFormex({ schema }: { schema: FormexSchema }) {
               );
             })}
           </Form>
+          <div data-component-id="submit" className="w-full cursor-pointer">
+            <Button type="primary" htmlType="submit" data-component-id="submit">
+              提交
+            </Button>
+          </div>
         </div>
       </div>
+      {/* 显示 hoverMask */}
       {hoverComponentId && (
         <HoverMask
           componentId={hoverComponentId}
@@ -80,6 +88,7 @@ export default function PreviewDevFormex({ schema }: { schema: FormexSchema }) {
       )}
       <div className="hover-mask"></div>
 
+      {/* 显示 over 示意线 */}
       {overComponentId && (
         <HoverMask
           componentId={overComponentId}

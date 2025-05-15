@@ -1,0 +1,31 @@
+import { Typography } from "antd";
+import MaterialWrapper from "./MaterialWrapper";
+
+export function MaterialWrapperHoc(
+  Component: React.FC<MaterialItemProps>
+): React.FC<MaterialItemProps> {
+  return function WrappedComponent(props: MaterialItemProps) {
+    return (
+      <MaterialWrapper {...props}>
+        <Component {...props} />
+      </MaterialWrapper>
+    );
+  };
+}
+
+export function FormItemHoc(
+  Component: React.FC<MaterialItemProps>
+): React.FC<MaterialItemProps> {
+  return function FormItemWrappedComponent(props: MaterialItemProps) {
+    return (
+      <div className="flex flex-col gap-2">
+        {props.name && (
+          <div className="label">
+            <Typography.Text>{props.name}</Typography.Text>
+          </div>
+        )}
+        <Component {...props} />
+      </div>
+    );
+  };
+}

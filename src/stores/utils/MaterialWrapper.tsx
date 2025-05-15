@@ -53,6 +53,7 @@ export default function MaterialWrapper(
       );
     },
     collect: (monitor) => {
+      // 只有在 不是自身元素时 才是 isOver
       const draggingItem = monitor.getItem() as ItemType | null;
       const isOverValid =
         !!monitor.isOver({ shallow: true }) && draggingItem?.id !== props.id;
@@ -70,6 +71,11 @@ export default function MaterialWrapper(
       dragType: "move",
       id: props.id,
       code: props.code,
+    },
+    collect(monitor) {
+      return {
+        dragging: monitor.isDragging(),
+      };
     },
   });
 

@@ -43,7 +43,7 @@ export default function FormexDesigner(props: {
             id="allotment-container"
             className="opacity-0"
           >
-            <Allotment.Pane preferredSize={280} maxSize={360} minSize={200}>
+            <Allotment.Pane preferredSize={280} maxSize={450} minSize={200}>
               <Material />
             </Allotment.Pane>
             <Allotment.Pane className="bg-[#e5e8ec]">

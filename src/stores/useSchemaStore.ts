@@ -6,6 +6,8 @@ interface SchemaState {
 
   overPlacement: "top" | "bottom";
   overComponentId: string;
+
+  selectedComponentId: string;
 }
 
 interface SchemaAction {
@@ -14,9 +16,27 @@ interface SchemaAction {
 
   setOverComponentId: (componentId: string) => void;
   setOverComponentPlacement: (placement: "top" | "bottom") => void;
+
+  setSelectedComponentId: (componentId: string) => void;
+
+  getMaterialItemByComponentId: (
+    componentId: string,
+    materialMap: Record<string, MaterialItem>
+  ) => MaterialItem | undefined;
 }
 
 export const useSchemaStore = create<SchemaState & SchemaAction>((set, get) => {
+  const setSelectedComponentId: SchemaAction["setSelectedComponentId"] = (
+    componentId
+  ) => {
+    set((prev) => {
+      return {
+        ...prev,
+        selectedComponentId: componentId,
+      };
+    });
+  };
+
   return {
     schema: {
       version: "1.0",
@@ -72,6 +92,8 @@ export const useSchemaStore = create<SchemaState & SchemaAction>((set, get) => {
           formItems.splice(insertIndex, 0, dragItemClone);
         }
 
+        setSelectedComponentId(dragItemClone.id);
+
         set({ ...get() });
       }
     },
@@ -96,7 +118,23 @@ export const useSchemaStore = create<SchemaState & SchemaAction>((set, get) => {
         formItems.push(newItem);
       }
 
+      setSelectedComponentId(newItem.id);
+
       set({ ...get() });
+    },
+
+    selectedComponentId: "",
+    setSelectedComponentId,
+    getMaterialItemByComponentId: (componentId, materialMap) => {
+      const { schema } = get();
+      const { formItems } = schema;
+      const item = formItems.find((it) => it.id === componentId);
+      if (!item) return;
+
+      const materialItem = materialMap[item.code];
+      if (!materialItem) return;
+
+      return materialItem;
     },
   };
 });

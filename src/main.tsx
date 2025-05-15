@@ -12,11 +12,12 @@ const testSchema: FormexSchemaV1 = {
     "https://winrobot-pub-a-1302949341.cos.ap-shanghai.myqcloud.com/image/20250514202954/395c74ad8b4de6e1b7a38247700842aa.png",
   formItems: [
     {
-      materialCode: "input",
-      code: "22",
-      name: "你好",
-      desc: "222",
-      props: {},
+      code: "input",
+      id: "22",
+      props: {
+        name: "姓名",
+        placeholder: "请输入姓名",
+      },
     },
   ],
   btnText: "提交",

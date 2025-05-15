@@ -1,5 +1,5 @@
-import PreviewFormex from "../../../../components/PreviewFormex";
 import { EditorModel } from "../../model";
+import PreviewDevFormex from "./PreviewDevFormex";
 
 export default function EditArea() {
   const { formexSchema } = EditorModel.useModel();
@@ -10,7 +10,7 @@ export default function EditArea() {
       </div>
       <div className="area flex justify-center">
         <div className="device mt-10 rounded-2xl bg-white  border border-gray-200 shadow-md w-[375px] h-[667px] overflow-hidden">
-          <PreviewFormex schema={formexSchema} />
+          <PreviewDevFormex schema={formexSchema} />
         </div>
       </div>
     </div>

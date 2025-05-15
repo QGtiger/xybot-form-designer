@@ -1,9 +1,7 @@
 interface FormexItem {
-  materialCode: string;
-
   code: string;
-  name?: string;
-  desc?: string;
+
+  id: string;
   props?: Record<string, any>;
 }
 

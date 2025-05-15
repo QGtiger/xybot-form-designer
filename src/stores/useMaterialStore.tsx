@@ -1,14 +1,7 @@
 import { createFromIconfontCN } from "@ant-design/icons";
-import { Input, InputNumber, Select } from "antd";
+import { InputNumber, Select } from "antd";
 import { create } from "zustand";
-
-interface MaterialItem {
-  code: string;
-  name: string;
-  desc: string;
-  dev: React.FC;
-  icon?: React.ReactNode;
-}
+import { MaterialInput } from "./materials/Input";
 
 interface MaterialState {
   materialList: MaterialItem[];
@@ -26,7 +19,10 @@ export const useMaterialStore = create<MaterialState>(() => {
       name: "输入框",
       desc: "输入框组件",
       icon: <IconFont type="icon-biaodanzujian-shurukuang" />,
-      dev: Input,
+      defaultProps: {
+        placeholder: "请输入",
+      },
+      dev: MaterialInput,
     },
     {
       code: "inputNumber",

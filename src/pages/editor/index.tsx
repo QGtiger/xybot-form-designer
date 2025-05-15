@@ -8,6 +8,8 @@ import { Allotment } from "allotment";
 import "allotment/dist/style.css";
 import { useEffect } from "react";
 import { EditorModel, EditorModelProps } from "./model";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 function FormexDesigner() {
   useEffect(() => {
@@ -43,8 +45,10 @@ function FormexDesigner() {
 
 export default function FormDesignerEditor(props: EditorModelProps) {
   return (
-    <EditorModel.Provider value={props}>
-      <FormexDesigner />
-    </EditorModel.Provider>
+    <DndProvider backend={HTML5Backend}>
+      <EditorModel.Provider value={props}>
+        <FormexDesigner />
+      </EditorModel.Provider>
+    </DndProvider>
   );
 }

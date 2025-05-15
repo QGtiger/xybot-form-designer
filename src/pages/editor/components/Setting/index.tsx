@@ -1,6 +1,6 @@
 import { useMaterialStore } from "@/stores/useMaterialStore";
 import { useSchemaStore } from "@/stores/useSchemaStore";
-import { Form, Input, Select } from "antd";
+import { Form, Input } from "antd";
 
 function renderFormElememt(setter: Setter) {
   const { type, props } = setter;
@@ -15,6 +15,7 @@ export default function Setting() {
     selectedComponentId,
     getMaterialItemByComponentId,
     getFormexItemByComponentId,
+    updateFormexItemByComponentId,
   } = useSchemaStore();
   const { materialMap } = useMaterialStore();
   const materialItem = getMaterialItemByComponentId(
@@ -37,6 +38,9 @@ export default function Setting() {
       initialValues={{
         ...defaultProps,
         ...props,
+      }}
+      onValuesChange={(changeValues) => {
+        updateFormexItemByComponentId(selectedComponentId, changeValues);
       }}
     >
       {configSetter.map((it) => {

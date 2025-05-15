@@ -24,6 +24,8 @@ interface SchemaAction {
     materialMap: Record<string, MaterialItem>
   ) => MaterialItem | undefined;
   getFormexItemByComponentId: (componentId: string) => FormexItem | undefined;
+
+  updateFormexItemByComponentId: (componentId: string, values: any) => void;
 }
 
 export const useSchemaStore = create<SchemaState & SchemaAction>((set, get) => {
@@ -37,6 +39,13 @@ export const useSchemaStore = create<SchemaState & SchemaAction>((set, get) => {
       };
     });
   };
+
+  const getFormexItemByComponentId: SchemaAction["getFormexItemByComponentId"] =
+    (componentId) => {
+      const { schema } = get();
+      const { formItems } = schema;
+      return formItems.find((it) => it.id === componentId);
+    };
 
   return {
     schema: {
@@ -157,10 +166,14 @@ export const useSchemaStore = create<SchemaState & SchemaAction>((set, get) => {
 
       return materialItem;
     },
-    getFormexItemByComponentId(componentId) {
-      const { schema } = get();
-      const { formItems } = schema;
-      return formItems.find((it) => it.id === componentId);
+    getFormexItemByComponentId,
+
+    updateFormexItemByComponentId(componentId, values) {
+      const formexItem = getFormexItemByComponentId(componentId);
+      if (!formexItem) return;
+      formexItem.props = formexItem.props || {};
+      Object.assign(formexItem.props, values);
+      set({ ...get() });
     },
   };
 });

@@ -1,29 +1,46 @@
 import { PropsWithChildren, useEffect, useRef } from "react";
 import { useMaterialStore } from "../useMaterialStore";
-import { useDrop } from "react-dnd";
+import { useDrag, useDrop } from "react-dnd";
 import { useMount } from "ahooks";
 import { useSchemaStore } from "../useSchemaStore";
+
+interface ItemType {
+  code: string;
+  dragType?: "move" | "add";
+  id: string;
+}
 
 export default function MaterialWrapper(
   props: PropsWithChildren<MaterialItemProps>
 ) {
-  const { materialKeys } = useMaterialStore();
+  const { materialKeys, materialMap } = useMaterialStore();
 
-  const { setOverComponentId, setOverComponentPlacement, insertFormItem } =
-    useSchemaStore();
+  const {
+    setOverComponentId,
+    setOverComponentPlacement,
+    insertFormItem,
+    swapFormItem,
+  } = useSchemaStore();
   const ref = useRef<HTMLDivElement>(null);
   const [{ isOver }, drop] = useDrop({
     accept: materialKeys,
-    drop(item: any, monitor) {
-      if (!ref.current) return;
+    drop(item: ItemType, monitor) {
+      if (!ref.current || item.id === props.id) return;
 
       if (monitor.didDrop()) {
         return;
       }
-      insertFormItem(item);
+
+      if (item.dragType === "move") {
+        console.log("move", item);
+        swapFormItem(item.id, props.id);
+        return;
+      }
+
+      insertFormItem(materialMap[item.code]);
     },
     hover(item: any, monitor) {
-      if (!ref.current) return;
+      if (!ref.current || item.id === props.id) return;
 
       const hoverBoundingRect = ref.current.getBoundingClientRect();
       const hoverThreshold =
@@ -36,15 +53,29 @@ export default function MaterialWrapper(
       );
     },
     collect: (monitor) => {
+      const draggingItem = monitor.getItem() as ItemType | null;
+      const isOverValid =
+        !!monitor.isOver({ shallow: true }) && draggingItem?.id !== props.id;
+
       return {
-        isOver: !!monitor.isOver(),
+        isOver: isOverValid,
         canDrop: !!monitor.canDrop(),
       };
     },
   });
 
+  const [, drag] = useDrag({
+    type: props.code,
+    item: {
+      dragType: "move",
+      id: props.id,
+      code: props.code,
+    },
+  });
+
   useMount(() => {
     drop(ref);
+    drag(ref);
   });
 
   useEffect(() => {

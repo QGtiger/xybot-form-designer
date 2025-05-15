@@ -11,5 +11,6 @@ interface MaterialItem {
 
 interface MaterialItemProps {
   id: string;
+  code: string;
   [x: string]: any;
 }

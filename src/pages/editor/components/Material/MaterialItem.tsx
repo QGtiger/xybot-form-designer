@@ -1,20 +1,16 @@
 import { useSchemaStore } from "@/stores/useSchemaStore";
-import { useMount } from "ahooks";
 import { useRef } from "react";
-import { useDrag } from "react-dnd";
+import useMaterialDrag from "../../useMaterialDrag";
 
 export default function MaterialItem({ it }: { it: MaterialItem }) {
   const { code } = it;
   const ref = useRef<HTMLDivElement>(null);
   const { insertFormItem } = useSchemaStore();
 
-  const [, drag] = useDrag({
+  useMaterialDrag({
     type: code,
-    item: { ...it },
-  });
-
-  useMount(() => {
-    drag(ref);
+    it,
+    ref,
   });
 
   return (

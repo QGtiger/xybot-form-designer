@@ -10,6 +10,7 @@ interface SchemaState {
 
 interface SchemaAction {
   insertFormItem: (materialItem: MaterialItem) => void;
+  swapFormItem: (dragItemId: string, hoverItemId: string) => void;
 
   setOverComponentId: (componentId: string) => void;
   setOverComponentPlacement: (placement: "top" | "bottom") => void;
@@ -45,6 +46,34 @@ export const useSchemaStore = create<SchemaState & SchemaAction>((set, get) => {
           overPlacement: placement,
         };
       });
+    },
+
+    swapFormItem: (dragItemId: string, hoverItemId: string) => {
+      const { schema, overPlacement } = get();
+      const { formItems } = schema;
+
+      const dragIndex = formItems.findIndex((it) => it.id === dragItemId);
+      let hoverIndex = formItems.findIndex((it) => it.id === hoverItemId);
+
+      if (dragIndex !== -1 && hoverIndex !== -1) {
+        // 拷贝一份
+        const dragItemClone = {
+          ...formItems[dragIndex],
+        };
+
+        formItems.splice(dragIndex, 1);
+
+        // 重新计算 hoverIndex
+        hoverIndex = formItems.findIndex((it) => it.id === hoverItemId);
+        if (hoverIndex !== -1) {
+          const insertIndex =
+            overPlacement === "top" ? hoverIndex : hoverIndex + 1;
+
+          formItems.splice(insertIndex, 0, dragItemClone);
+        }
+
+        set({ ...get() });
+      }
     },
 
     insertFormItem(materialItem: MaterialItem) {

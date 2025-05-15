@@ -66,7 +66,12 @@ export default function PreviewDevFormex() {
               const { dev: T } = martialItem;
               return (
                 <Form.Item key={id} name={id}>
-                  <T id={id} {...martialItem.defaultProps} {...props} />
+                  <T
+                    id={id}
+                    code={code}
+                    {...martialItem.defaultProps}
+                    {...props}
+                  />
                 </Form.Item>
               );
             })}

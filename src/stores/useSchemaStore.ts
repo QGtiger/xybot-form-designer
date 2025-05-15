@@ -23,6 +23,7 @@ interface SchemaAction {
     componentId: string,
     materialMap: Record<string, MaterialItem>
   ) => MaterialItem | undefined;
+  getFormexItemByComponentId: (componentId: string) => FormexItem | undefined;
 }
 
 export const useSchemaStore = create<SchemaState & SchemaAction>((set, get) => {
@@ -155,6 +156,11 @@ export const useSchemaStore = create<SchemaState & SchemaAction>((set, get) => {
       if (!materialItem) return;
 
       return materialItem;
+    },
+    getFormexItemByComponentId(componentId) {
+      const { schema } = get();
+      const { formItems } = schema;
+      return formItems.find((it) => it.id === componentId);
     },
   };
 });

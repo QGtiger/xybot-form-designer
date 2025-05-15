@@ -18,7 +18,7 @@ export default function FormexDesigner(props: {
   initialSchema?: FormexSchema;
 }) {
   const { initialSchema } = props;
-  const { setSchema } = useSchemaStore();
+  const { setSchema, selectedComponentId } = useSchemaStore();
 
   useEffect(() => {
     initialSchema && setSchema(initialSchema);
@@ -43,14 +43,16 @@ export default function FormexDesigner(props: {
             id="allotment-container"
             className="opacity-0"
           >
-            <Allotment.Pane preferredSize={280} maxSize={450} minSize={200}>
+            <Allotment.Pane preferredSize={280} maxSize={400} minSize={200}>
               <Material />
             </Allotment.Pane>
             <Allotment.Pane className="bg-[#e5e8ec]">
               <EditArea />
             </Allotment.Pane>
-            <Allotment.Pane preferredSize={300} maxSize={500} minSize={260}>
-              <Setting />
+            <Allotment.Pane preferredSize={300} maxSize={450} minSize={260}>
+              <div className="p-4 px-6">
+                <Setting key={selectedComponentId} />
+              </div>
             </Allotment.Pane>
           </Allotment>
         </div>

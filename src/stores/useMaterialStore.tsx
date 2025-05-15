@@ -19,8 +19,6 @@ const IconFont = createFromIconfontCN({
   scriptUrl: "//at.alicdn.com/t/c/font_4921468_yvwiue2ag0o.js",
 });
 
-export const TitleKey = "title";
-
 export const useMaterialStore = create<MaterialState>(() => {
   const MaterialInput = FormItemHoc(FormItemLabelHoc(Input));
   const MaterialInputNumber = FormItemHoc(
@@ -67,6 +65,13 @@ export const useMaterialStore = create<MaterialState>(() => {
       defaultProps: {
         text: "表单标题",
       },
+      configSetter: [
+        {
+          type: "input",
+          name: "text",
+          label: "标题文案",
+        },
+      ],
       dev: MaterialWrapperHoc(Title),
       prod: Title,
     },
@@ -79,6 +84,13 @@ export const useMaterialStore = create<MaterialState>(() => {
       defaultProps: {
         text: "表单副标题22",
       },
+      configSetter: [
+        {
+          type: "input",
+          name: "text",
+          label: "副标题文案",
+        },
+      ],
       dev: MaterialWrapperHoc(SubTitle),
       prod: SubTitle,
     },
@@ -91,6 +103,13 @@ export const useMaterialStore = create<MaterialState>(() => {
       defaultProps: {
         text: "提交",
       },
+      configSetter: [
+        {
+          type: "input",
+          name: "text",
+          label: "按钮文案",
+        },
+      ],
       dev: MaterialWrapperHoc(Submit),
       prod: Submit,
     },
@@ -100,6 +119,23 @@ export const useMaterialStore = create<MaterialState>(() => {
       desc: "输入框组件",
       icon: <IconFont type="icon-biaodanzujian-shurukuang" />,
       defaultProps,
+      configSetter: [
+        {
+          type: "input",
+          name: "placeholder",
+          label: "占位文案",
+        },
+        {
+          type: "input",
+          name: "defaultValue",
+          label: "默认文案",
+        },
+        {
+          type: "input",
+          name: "name",
+          label: "标题文案",
+        },
+      ],
       dev: MaterialWrapperHoc(MaterialInput),
       prod: MaterialInput,
     },

@@ -40,12 +40,31 @@ export const useSchemaStore = create<SchemaState & SchemaAction>((set, get) => {
   return {
     schema: {
       version: "1.0",
-      title: "表单标题",
-      subtitle: "表单副标题",
-      background:
-        "https://winrobot-pub-a-1302949341.cos.ap-shanghai.myqcloud.com/image/20250514202954/395c74ad8b4de6e1b7a38247700842aa.png",
-      formItems: [],
-      btnText: "提交",
+      formItems: [
+        {
+          id: "banner",
+          code: "banner",
+        },
+        {
+          id: "title",
+          code: "title",
+        },
+        {
+          id: "subtitle",
+          code: "subtitle",
+        },
+        {
+          id: "input-1",
+          code: "input",
+          props: {
+            name: "111",
+          },
+        },
+        {
+          id: "submit",
+          code: "submit",
+        },
+      ],
     },
     setSchema: (schema) => set({ schema }),
 
@@ -115,7 +134,8 @@ export const useSchemaStore = create<SchemaState & SchemaAction>((set, get) => {
         const insertIndex = overPlacement === "top" ? index : index + 1;
         formItems.splice(insertIndex, 0, newItem);
       } else {
-        formItems.push(newItem);
+        // TODO 这里特殊处理一下，添加到倒数第二个
+        formItems.splice(formItems.length - 1, 0, newItem);
       }
 
       setSelectedComponentId(newItem.id);

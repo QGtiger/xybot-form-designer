@@ -4,13 +4,13 @@ interface MaterialItem {
   desc: string;
   icon?: React.ReactNode;
   defaultProps?: Record<string, any>;
+  hidden?: boolean;
 
-  dev: React.FC<MaterialItemProps>;
+  dev: React.FC<MaterialItemProps<Record<string, any>>>;
   prod: React.FC<MaterialItemProps>;
 }
 
-interface MaterialItemProps {
+type MaterialItemProps<T = any> = {
   id: string;
   code: string;
-  [x: string]: any;
-}
+} & T;

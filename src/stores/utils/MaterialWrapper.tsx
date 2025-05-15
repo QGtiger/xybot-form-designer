@@ -13,7 +13,10 @@ interface ItemType {
 export default function MaterialWrapper(
   props: PropsWithChildren<MaterialItemProps>
 ) {
-  const { materialKeys, materialMap } = useMaterialStore();
+  const { materialKeys, materialMap, getMaterialItemByCode } =
+    useMaterialStore();
+  const { code } = props;
+  const materialItem = getMaterialItemByCode(code);
 
   const {
     setOverComponentId,
@@ -80,8 +83,8 @@ export default function MaterialWrapper(
   });
 
   useMount(() => {
-    drop(ref);
-    drag(ref);
+    materialItem.hidden || drop(ref);
+    materialItem.hidden || drag(ref);
   });
 
   useEffect(() => {

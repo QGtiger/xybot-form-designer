@@ -1,4 +1,4 @@
-import { Typography } from "antd";
+import { Form, Typography } from "antd";
 import MaterialWrapper from "./MaterialWrapper";
 
 export function MaterialWrapperHoc(
@@ -17,6 +17,18 @@ export function FormItemHoc(
   Component: React.FC<MaterialItemProps>
 ): React.FC<MaterialItemProps> {
   return function FormItemWrappedComponent(props: MaterialItemProps) {
+    return <Form.Item name={props.id}>{<Component {...props} />}</Form.Item>;
+  };
+}
+
+export function FormItemLabelHoc(
+  Component: React.FC<MaterialItemProps>
+): React.FC<
+  MaterialItemProps<{
+    name: string;
+  }>
+> {
+  return function FormItemWrappedComponent(props) {
     return (
       <div className="flex flex-col gap-2">
         {props.name && (

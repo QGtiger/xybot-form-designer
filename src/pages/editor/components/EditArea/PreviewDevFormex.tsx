@@ -1,5 +1,5 @@
 import { useMaterialMap } from "@/stores/useMaterialStore";
-import { Button, Form, Typography } from "antd";
+import { Form } from "antd";
 import classNames from "classnames";
 import { MouseEventHandler, useRef, useState } from "react";
 import HoverMask from "./HoverMask";
@@ -16,7 +16,10 @@ export default function PreviewDevFormex() {
   } = useSchemaStore();
   const { schema } = useSchemaStore();
   const materialMap = useMaterialMap();
-  const { title, subtitle, background, formItems } = schema;
+  const { formItems } = schema;
+  const selectedIndex = formItems.findIndex(
+    (item) => item.id === selectedComponentId
+  );
 
   const formexDomRef = useRef<HTMLDivElement>(null);
 
@@ -57,55 +60,26 @@ export default function PreviewDevFormex() {
     <div
       onMouseOver={handleMouseOver}
       onClick={handleClick}
-      className=" overflow-auto edit-area relative w-full h-full bg-white md:bg-gradient-to-b md:from-indigo-200 md:via-cyan-50 md:to-white "
+      className=" overflow-x-hidden overflow-y-auto edit-area relative w-full h-full bg-white md:bg-gradient-to-b md:from-indigo-200 md:via-cyan-50 md:to-white "
     >
-      <div
-        className="h-[180px]"
-        style={{
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundImage: `url(${background})`,
-        }}
-      ></div>
-
-      <div className="mt-4 p-4">
-        <div
-          className=" line-clamp-1 text-center text-xl font-semibold cursor-pointer"
-          data-component-id="title"
-        >
-          {title}
-        </div>
-        <div className="mt-2">
-          <div data-component-id="subtitle" className=" cursor-pointer">
-            <Typography.Text type="secondary">{subtitle}</Typography.Text>
-          </div>
-        </div>
-
-        <div className={classNames("mt-4")} ref={formexDomRef}>
-          <Form colon={false} layout="vertical">
-            {formItems.map((it) => {
-              const { code, props, id } = it;
-              const martialItem = materialMap[code];
-              if (!martialItem) return;
-              const { dev: T } = martialItem;
-              return (
-                <Form.Item key={id} name={id}>
-                  <T
-                    id={id}
-                    code={code}
-                    {...martialItem.defaultProps}
-                    {...props}
-                  />
-                </Form.Item>
-              );
-            })}
-          </Form>
-          <div data-component-id="submit" className="w-full cursor-pointer">
-            <Button type="primary" htmlType="submit" data-component-id="submit">
-              提交
-            </Button>
-          </div>
-        </div>
+      <div className={classNames("p-4")} ref={formexDomRef}>
+        <Form colon={false} layout="vertical">
+          {formItems.map((it) => {
+            const { code, props, id } = it;
+            const martialItem = materialMap[code];
+            if (!martialItem) return;
+            const { dev: T } = martialItem;
+            return (
+              <T
+                key={id}
+                id={id}
+                code={code}
+                {...martialItem.defaultProps}
+                {...props}
+              />
+            );
+          })}
+        </Form>
       </div>
       {/* 显示 hoverMask */}
       {hoverComponentId && (
@@ -142,6 +116,7 @@ export default function PreviewDevFormex() {
       {/* 显示选择 mask */}
       {selectedComponentId && (
         <HoverMask
+          key={selectedIndex}
           componentId={selectedComponentId}
           containerClassName="edit-area"
           portalClassName="selected-mask"

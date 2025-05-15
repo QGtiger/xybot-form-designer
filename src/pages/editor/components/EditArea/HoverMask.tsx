@@ -1,3 +1,4 @@
+import { useSize } from "ahooks";
 import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 
@@ -26,8 +27,19 @@ export default function HoverMask({
     width: 0,
     height: 0,
   });
+  const tt = useSize(
+    document.querySelector(`[data-component-id="${componentId}"]`)
+  );
 
   useEffect(() => {
+    updatePostion();
+  }, [tt?.width, tt?.height]);
+
+  useEffect(() => {
+    updatePostion();
+  }, [componentId]);
+
+  const updatePostion = () => {
     if (!componentId) return;
 
     const container = document.querySelector(`.${containerClassName}`);
@@ -46,7 +58,7 @@ export default function HoverMask({
       width,
       height,
     });
-  }, [componentId]);
+  };
 
   const ele = useMemo(() => {
     return document.querySelector(`.${portalClassName}`)!;

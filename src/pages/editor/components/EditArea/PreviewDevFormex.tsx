@@ -38,43 +38,31 @@ export default function PreviewDevFormex() {
     setSelectedComponentId("");
   };
 
-  const handleMouseOver: MouseEventHandler = (e) => {
-    // 通过 e.nativeEvent.composedPath() 获取到鼠标悬停的元素 冒泡的元素列表
-    const path = e.nativeEvent.composedPath();
+  useEffect(() => {
+    const handleMouseOver = (e: MouseEvent) => {
+      // 通过 e.nativeEvent.composedPath() 获取到鼠标悬停的元素 冒泡的元素列表
+      const path = e.composedPath();
 
-    for (const element of path) {
-      const ele = element as HTMLElement;
+      for (const element of path) {
+        const ele = element as HTMLElement;
 
-      const componentId = ele.dataset?.componentId;
-      if (componentId) {
-        setHoverComponetId(componentId);
-        return;
+        const componentId = ele.dataset?.componentId;
+        if (componentId) {
+          setHoverComponetId(componentId);
+          return;
+        }
       }
-    }
+      setHoverComponetId("");
+    };
+    document.addEventListener("mouseover", handleMouseOver);
+    return () => {
+      document.removeEventListener("mouseover", handleMouseOver);
+    };
+  }, []);
+
+  useEffect(() => {
     setHoverComponetId("");
-  };
-
-  // useEffect(() => {
-  //   const handleMouseOver = (e: MouseEvent) => {
-  //     // 通过 e.nativeEvent.composedPath() 获取到鼠标悬停的元素 冒泡的元素列表
-  //     const path = e.composedPath();
-
-  //     for (const element of path) {
-  //       const ele = element as HTMLElement;
-
-  //       const componentId = ele.dataset?.componentId;
-  //       if (componentId) {
-  //         setHoverComponetId(componentId);
-  //         return;
-  //       }
-  //     }
-  //     setHoverComponetId("");
-  //   };
-  //   document.addEventListener("mouseover", handleMouseOver);
-  //   return () => {
-  //     document.removeEventListener("mouseover", handleMouseOver);
-  //   };
-  // }, []);
+  }, [selectedIndex]);
 
   function renderComponents(components?: FormexItem[]): React.ReactNode {
     if (!components) return null;
@@ -101,7 +89,6 @@ export default function PreviewDevFormex() {
   return (
     <div
       onClick={handleClick}
-      onMouseOver={handleMouseOver}
       className="edit-area relative w-full min-h-full bg-white md:bg-gradient-to-b md:from-indigo-200 md:via-cyan-50 md:to-white  rounded-xl"
     >
       <div className={classNames("")} ref={formexDomRef}>

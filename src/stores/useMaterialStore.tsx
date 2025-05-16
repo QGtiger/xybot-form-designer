@@ -1,4 +1,5 @@
 import {
+  BankOutlined,
   createFromIconfontCN,
   NumberOutlined,
   SelectOutlined,
@@ -50,7 +51,7 @@ export const useMaterialStore = create<MaterialState>(() => {
       code: "banner",
       name: "Banner",
       desc: "Banner 组件",
-      icon: <IconFont type="icon-banner" />,
+      icon: <BankOutlined />,
       hidden: true,
       defaultProps: {
         background:

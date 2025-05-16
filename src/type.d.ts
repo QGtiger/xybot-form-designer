@@ -3,6 +3,8 @@ interface FormexItem {
 
   id: string;
   props?: Record<string, any>;
+
+  children?: FormexItem[];
 }
 
 interface FormexSchemaV1 {

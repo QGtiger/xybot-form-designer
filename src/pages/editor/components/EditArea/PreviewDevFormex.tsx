@@ -1,7 +1,7 @@
 import { useMaterialMap } from "@/stores/useMaterialStore";
 import { Form } from "antd";
 import classNames from "classnames";
-import { MouseEventHandler, useRef, useState } from "react";
+import { MouseEventHandler, useEffect, useRef, useState } from "react";
 import HoverMask from "./HoverMask";
 import { useSchemaStore } from "@/stores/useSchemaStore";
 import { motion } from "framer-motion";
@@ -25,22 +25,6 @@ export default function PreviewDevFormex() {
 
   const [hoverComponentId, setHoverComponetId] = useState("");
 
-  const handleMouseOver: MouseEventHandler = (e) => {
-    // 通过 e.nativeEvent.composedPath() 获取到鼠标悬停的元素 冒泡的元素列表
-    const path = e.nativeEvent.composedPath();
-
-    for (const element of path) {
-      const ele = element as HTMLElement;
-
-      const componentId = ele.dataset?.componentId;
-      if (componentId) {
-        setHoverComponetId(componentId);
-        return;
-      }
-    }
-    setHoverComponetId("");
-  };
-
   const handleClick: MouseEventHandler = (e) => {
     const path = e.nativeEvent.composedPath();
 
@@ -56,13 +40,34 @@ export default function PreviewDevFormex() {
     setSelectedComponentId("");
   };
 
+  useEffect(() => {
+    const handleMouseOver = (e: MouseEvent) => {
+      // 通过 e.nativeEvent.composedPath() 获取到鼠标悬停的元素 冒泡的元素列表
+      const path = e.composedPath();
+
+      for (const element of path) {
+        const ele = element as HTMLElement;
+
+        const componentId = ele.dataset?.componentId;
+        if (componentId) {
+          setHoverComponetId(componentId);
+          return;
+        }
+      }
+      setHoverComponetId("");
+    };
+    document.addEventListener("mouseover", handleMouseOver);
+    return () => {
+      document.removeEventListener("mouseover", handleMouseOver);
+    };
+  }, []);
+
   return (
     <div
-      onMouseOver={handleMouseOver}
       onClick={handleClick}
-      className=" overflow-x-hidden overflow-y-auto edit-area relative w-full h-full bg-white md:bg-gradient-to-b md:from-indigo-200 md:via-cyan-50 md:to-white "
+      className="edit-area relative w-full min-h-full bg-white md:bg-gradient-to-b md:from-indigo-200 md:via-cyan-50 md:to-white  rounded-xl"
     >
-      <div className={classNames("p-4")} ref={formexDomRef}>
+      <div className={classNames("")} ref={formexDomRef}>
         <Form colon={false} layout="vertical">
           {formItems.map((it) => {
             const { code, props, id } = it;

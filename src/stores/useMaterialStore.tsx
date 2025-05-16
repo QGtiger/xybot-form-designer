@@ -1,8 +1,10 @@
 import {
   BankOutlined,
   createFromIconfontCN,
+  FormOutlined,
   NumberOutlined,
   SelectOutlined,
+  RightOutlined,
 } from "@ant-design/icons";
 import { DatePicker, Input, InputNumber } from "antd";
 import { create } from "zustand";
@@ -14,6 +16,7 @@ import Banner from "./materials/banner";
 import MutliSelect from "./materials/multiSelect";
 import CustomSelect from "./materials/select";
 import { defaultInputSetter } from "./utils/constant";
+import CustomForm from "./materials/form";
 
 interface MaterialState {
   materialList: MaterialItem[];
@@ -47,6 +50,15 @@ export const useMaterialStore = create<MaterialState>(() => {
   };
 
   const materialList: MaterialItem[] = [
+    {
+      code: "form",
+      name: "表单容器",
+      desc: "表单容器组件",
+      icon: <FormOutlined />,
+      hidden: true,
+      dev: MaterialWrapperHoc(CustomForm),
+      prod: CustomForm,
+    },
     {
       code: "banner",
       name: "Banner",
@@ -102,7 +114,7 @@ export const useMaterialStore = create<MaterialState>(() => {
       code: "submit",
       name: "提交按钮",
       desc: "表单提交按钮",
-      icon: <IconFont type="icon-submit" />,
+      icon: <RightOutlined />,
       hidden: true,
       defaultProps: {
         text: "提交",

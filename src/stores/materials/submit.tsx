@@ -6,7 +6,7 @@ export default function Submit(
   }>
 ) {
   return (
-    <Button type="primary" htmlType="submit">
+    <Button type="primary" htmlType="submit" block>
       {props.text}
     </Button>
   );

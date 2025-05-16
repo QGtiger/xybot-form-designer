@@ -1,7 +1,6 @@
 import { useMaterialMap } from "@/stores/useMaterialStore";
-import { Form } from "antd";
 import classNames from "classnames";
-import { MouseEventHandler, useEffect, useRef, useState } from "react";
+import React, { MouseEventHandler, useEffect, useRef, useState } from "react";
 import HoverMask from "./HoverMask";
 import { useSchemaStore } from "@/stores/useSchemaStore";
 import { motion } from "framer-motion";
@@ -13,13 +12,12 @@ export default function PreviewDevFormex() {
     selectedComponentId,
     setSelectedComponentId,
     getMaterialItemByComponentId,
+    getFormexItemIndexByComponentId,
   } = useSchemaStore();
   const { schema } = useSchemaStore();
   const materialMap = useMaterialMap();
   const { formItems } = schema;
-  const selectedIndex = formItems.findIndex(
-    (item) => item.id === selectedComponentId
-  );
+  const selectedIndex = getFormexItemIndexByComponentId(selectedComponentId);
 
   const formexDomRef = useRef<HTMLDivElement>(null);
 
@@ -40,51 +38,98 @@ export default function PreviewDevFormex() {
     setSelectedComponentId("");
   };
 
-  useEffect(() => {
-    const handleMouseOver = (e: MouseEvent) => {
-      // 通过 e.nativeEvent.composedPath() 获取到鼠标悬停的元素 冒泡的元素列表
-      const path = e.composedPath();
+  const handleMouseOver: MouseEventHandler = (e) => {
+    // 通过 e.nativeEvent.composedPath() 获取到鼠标悬停的元素 冒泡的元素列表
+    const path = e.nativeEvent.composedPath();
 
-      for (const element of path) {
-        const ele = element as HTMLElement;
+    for (const element of path) {
+      const ele = element as HTMLElement;
 
-        const componentId = ele.dataset?.componentId;
-        if (componentId) {
-          setHoverComponetId(componentId);
-          return;
-        }
+      const componentId = ele.dataset?.componentId;
+      if (componentId) {
+        setHoverComponetId(componentId);
+        return;
       }
-      setHoverComponetId("");
-    };
-    document.addEventListener("mouseover", handleMouseOver);
-    return () => {
-      document.removeEventListener("mouseover", handleMouseOver);
-    };
-  }, []);
+    }
+    setHoverComponetId("");
+  };
+
+  // useEffect(() => {
+  //   const handleMouseOver = (e: MouseEvent) => {
+  //     // 通过 e.nativeEvent.composedPath() 获取到鼠标悬停的元素 冒泡的元素列表
+  //     const path = e.composedPath();
+
+  //     for (const element of path) {
+  //       const ele = element as HTMLElement;
+
+  //       const componentId = ele.dataset?.componentId;
+  //       if (componentId) {
+  //         setHoverComponetId(componentId);
+  //         return;
+  //       }
+  //     }
+  //     setHoverComponetId("");
+  //   };
+  //   document.addEventListener("mouseover", handleMouseOver);
+  //   return () => {
+  //     document.removeEventListener("mouseover", handleMouseOver);
+  //   };
+  // }, []);
+
+  function renderComponents(components?: FormexItem[]): React.ReactNode {
+    if (!components) return null;
+    return components.map((it) => {
+      const { code, props, id } = it;
+      const martialItem = materialMap[code];
+      if (!martialItem) return;
+      const { dev: T } = martialItem;
+
+      return React.createElement(
+        T,
+        {
+          key: id,
+          id,
+          code,
+          ...martialItem.defaultProps,
+          ...props,
+        },
+        renderComponents(it.children)
+      );
+    });
+  }
 
   return (
     <div
       onClick={handleClick}
+      onMouseOver={handleMouseOver}
       className="edit-area relative w-full min-h-full bg-white md:bg-gradient-to-b md:from-indigo-200 md:via-cyan-50 md:to-white  rounded-xl"
     >
       <div className={classNames("")} ref={formexDomRef}>
-        <Form colon={false} layout="vertical">
-          {formItems.map((it) => {
-            const { code, props, id } = it;
-            const martialItem = materialMap[code];
-            if (!martialItem) return;
-            const { dev: T } = martialItem;
-            return (
-              <T
-                key={id}
-                id={id}
-                code={code}
-                {...martialItem.defaultProps}
-                {...props}
-              />
-            );
-          })}
-        </Form>
+        {renderComponents(formItems)}
+        {/* {formItems.map((it) => {
+          const { code, props, id } = it;
+          const martialItem = materialMap[code];
+          if (!martialItem) return;
+          const { dev: T } = martialItem;
+          return (
+            <T
+              key={id}
+              id={id}
+              code={code}
+              {...martialItem.defaultProps}
+              {...props}
+            />
+          );
+        })} */}
+        {/* <Form
+          colon={false}
+          layout="vertical"
+          onFinish={() => {
+            console.log("submit");
+          }}
+        >
+          
+        </Form> */}
       </div>
       {/* 显示 hoverMask */}
       {hoverComponentId && (
@@ -108,7 +153,9 @@ export default function PreviewDevFormex() {
                 className=" absolute h-[2px] bg-blue-500"
                 style={{
                   left: props.left,
-                  top: props.top + (overPlacement === "top" ? 0 : props.height),
+                  top:
+                    props.top +
+                    (overPlacement === "top" ? 0 : props.height + 2),
                   width: props.width,
                 }}
               ></div>

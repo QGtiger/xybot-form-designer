@@ -26,9 +26,34 @@ interface SchemaAction {
   getFormexItemByComponentId: (componentId: string) => FormexItem | undefined;
 
   updateFormexItemByComponentId: (componentId: string, values: any) => void;
+
+  getFormexItemIndexByComponentId: (componentId: string) => number;
 }
 
 export const useSchemaStore = create<SchemaState & SchemaAction>((set, get) => {
+  const getFormexItemsWithForm = () => {
+    const { schema } = get();
+    const { formItems } = schema;
+
+    return formItems.find((it) => it.id === "form")?.children || [];
+  };
+
+  const getFormexItemById = (
+    id: string,
+    formexItems: FormexItem[]
+  ): FormexItem | undefined => {
+    if (!id) return;
+
+    for (const item of formexItems) {
+      if (item.id == id) return item;
+      if (item.children && item.children.length > 0) {
+        const result = getFormexItemById(id, item.children);
+        if (result !== null) return result;
+      }
+    }
+    return;
+  };
+
   const setSelectedComponentId: SchemaAction["setSelectedComponentId"] = (
     componentId
   ) => {
@@ -42,9 +67,7 @@ export const useSchemaStore = create<SchemaState & SchemaAction>((set, get) => {
 
   const getFormexItemByComponentId: SchemaAction["getFormexItemByComponentId"] =
     (componentId) => {
-      const { schema } = get();
-      const { formItems } = schema;
-      return formItems.find((it) => it.id === componentId);
+      return getFormexItemById(componentId, get().schema.formItems);
     };
 
   return {
@@ -56,23 +79,29 @@ export const useSchemaStore = create<SchemaState & SchemaAction>((set, get) => {
           code: "banner",
         },
         {
-          id: "title",
-          code: "title",
-        },
-        {
-          id: "subtitle",
-          code: "subtitle",
-        },
-        {
-          id: "input-1",
-          code: "input",
-          props: {
-            name: "111",
-          },
-        },
-        {
-          id: "submit",
-          code: "submit",
+          id: "form",
+          code: "form",
+          children: [
+            {
+              id: "title",
+              code: "title",
+            },
+            {
+              id: "subtitle",
+              code: "subtitle",
+            },
+            {
+              id: "input-1",
+              code: "input",
+              props: {
+                name: "111",
+              },
+            },
+            {
+              id: "submit",
+              code: "submit",
+            },
+          ],
         },
       ],
     },
@@ -98,8 +127,8 @@ export const useSchemaStore = create<SchemaState & SchemaAction>((set, get) => {
     },
 
     swapFormItem: (dragItemId: string, hoverItemId: string) => {
-      const { schema, overPlacement } = get();
-      const { formItems } = schema;
+      const { overPlacement } = get();
+      const formItems = getFormexItemsWithForm();
 
       const dragIndex = formItems.findIndex((it) => it.id === dragItemId);
       let hoverIndex = formItems.findIndex((it) => it.id === hoverItemId);
@@ -128,8 +157,8 @@ export const useSchemaStore = create<SchemaState & SchemaAction>((set, get) => {
     },
 
     insertFormItem(materialItem: MaterialItem) {
-      const { schema, overComponentId, overPlacement } = get();
-      const { formItems } = schema;
+      const { overComponentId, overPlacement } = get();
+      const formItems = getFormexItemsWithForm();
 
       const newItem: FormexItem = {
         code: materialItem.code,
@@ -156,9 +185,7 @@ export const useSchemaStore = create<SchemaState & SchemaAction>((set, get) => {
     selectedComponentId: "",
     setSelectedComponentId,
     getMaterialItemByComponentId: (componentId, materialMap) => {
-      const { schema } = get();
-      const { formItems } = schema;
-      const item = formItems.find((it) => it.id === componentId);
+      const item = getFormexItemByComponentId(componentId);
       if (!item) return;
 
       const materialItem = materialMap[item.code];
@@ -174,6 +201,11 @@ export const useSchemaStore = create<SchemaState & SchemaAction>((set, get) => {
       formexItem.props = formexItem.props || {};
       Object.assign(formexItem.props, values);
       set({ ...get() });
+    },
+
+    getFormexItemIndexByComponentId(componentId) {
+      const formexItems = getFormexItemsWithForm();
+      return formexItems.findIndex((it) => it.id === componentId);
     },
   };
 });

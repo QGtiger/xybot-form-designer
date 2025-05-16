@@ -1,3 +1,21 @@
+import { Form } from "antd";
+import { PropsWithChildren } from "react";
+
 export default function CustomForm(
-  props: MaterialItemProps & { background: string }
-) {}
+  props: PropsWithChildren<MaterialItemProps>
+) {
+  return (
+    <div className="px-10 py-4">
+      <Form
+        colon={false}
+        layout="vertical"
+        onFinish={() => {
+          console.log("submit");
+        }}
+        {...props}
+      >
+        {props.children}
+      </Form>
+    </div>
+  );
+}

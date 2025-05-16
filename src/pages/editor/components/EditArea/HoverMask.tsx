@@ -71,13 +71,13 @@ export default function HoverMask({
       <div
         style={{
           position: "absolute",
-          left: position.left - 2,
-          top: position.top - 2,
+          left: position.left,
+          top: position.top,
           backgroundColor: "rgba(0, 0, 255, 0.1)",
           border: "1px dashed blue",
           pointerEvents: "none",
-          width: position.width + 4,
-          height: position.height + 4,
+          width: position.width,
+          height: position.height,
           zIndex: 12,
           borderRadius: 2,
           boxSizing: "border-box",

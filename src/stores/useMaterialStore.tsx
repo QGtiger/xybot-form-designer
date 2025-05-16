@@ -1,4 +1,8 @@
-import { createFromIconfontCN } from "@ant-design/icons";
+import {
+  createFromIconfontCN,
+  NumberOutlined,
+  SelectOutlined,
+} from "@ant-design/icons";
 import { DatePicker, Input, InputNumber } from "antd";
 import { create } from "zustand";
 import { FormItemHoc, FormItemLabelHoc, MaterialWrapperHoc } from "./utils";
@@ -19,7 +23,7 @@ interface MaterialState {
 }
 
 const IconFont = createFromIconfontCN({
-  scriptUrl: "//at.alicdn.com/t/c/font_4921468_yvwiue2ag0o.js",
+  scriptUrl: "//at.alicdn.com/t/c/font_4921468_i9tqszect6l.js",
 });
 
 export const useMaterialStore = create<MaterialState>(() => {
@@ -133,7 +137,7 @@ export const useMaterialStore = create<MaterialState>(() => {
       code: "inputNumber",
       name: "数字输入",
       desc: "数字输入框组件",
-      icon: <IconFont type="icon-fuhao-shuzishurukuang" />,
+      icon: <NumberOutlined />,
       dev: MaterialWrapperHoc(MaterialInputNumber),
       prod: MaterialInputNumber,
       defaultProps,
@@ -150,7 +154,7 @@ export const useMaterialStore = create<MaterialState>(() => {
       code: "select",
       name: "下拉选择",
       desc: "单选下拉",
-      icon: <IconFont type="icon-danxuanxiala" />,
+      icon: <SelectOutlined />,
       dev: MaterialWrapperHoc(MaterialSelect),
       prod: MaterialSelect,
       defaultProps,

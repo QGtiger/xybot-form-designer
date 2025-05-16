@@ -1,12 +1,21 @@
 import { useMaterialStore } from "@/stores/useMaterialStore";
 import { useSchemaStore } from "@/stores/useSchemaStore";
-import { Form, Input } from "antd";
+import { Form, Input, InputNumber } from "antd";
 
 function renderFormElememt(setter: Setter) {
-  const { type, props } = setter;
+  const { type, componentProps } = setter;
 
   if (type === "input") {
-    return <Input placeholder="请输入" {...props} variant="filled" />;
+    return <Input placeholder="请输入" {...componentProps} variant="filled" />;
+  } else if (type === "inputnumber") {
+    return (
+      <InputNumber
+        placeholder="请输入"
+        className="!w-full"
+        {...componentProps}
+        variant="filled"
+      />
+    );
   }
 }
 

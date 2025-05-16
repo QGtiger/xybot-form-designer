@@ -1,11 +1,14 @@
 import { createFromIconfontCN } from "@ant-design/icons";
-import { DatePicker, Input, InputNumber, Select } from "antd";
+import { DatePicker, Input, InputNumber } from "antd";
 import { create } from "zustand";
 import { FormItemHoc, FormItemLabelHoc, MaterialWrapperHoc } from "./utils";
 import Title from "./materials/title";
 import SubTitle from "./materials/subtitle";
 import Submit from "./materials/submit";
 import Banner from "./materials/banner";
+import MutliSelect from "./materials/multiSelect";
+import CustomSelect from "./materials/select";
+import { defaultInputSetter } from "./utils/constant";
 
 interface MaterialState {
   materialList: MaterialItem[];
@@ -26,12 +29,8 @@ export const useMaterialStore = create<MaterialState>(() => {
       return <InputNumber {...props} style={{ width: "100%" }} />;
     })
   );
-  const MaterialSelect = FormItemHoc(FormItemLabelHoc(Select));
-  const MaterialMultiSelect = FormItemHoc(
-    FormItemLabelHoc((props: any) => {
-      return <Select {...props} mode="multiple" style={{ width: "100%" }} />;
-    })
-  );
+  const MaterialSelect = FormItemHoc(FormItemLabelHoc(CustomSelect));
+  const MaterialMultiSelect = FormItemHoc(FormItemLabelHoc(MutliSelect));
   const MaterialDatePicker = FormItemHoc(
     FormItemLabelHoc((props: any) => {
       return <DatePicker {...props} style={{ width: "100%" }} />;
@@ -120,20 +119,11 @@ export const useMaterialStore = create<MaterialState>(() => {
       icon: <IconFont type="icon-biaodanzujian-shurukuang" />,
       defaultProps,
       configSetter: [
-        {
-          type: "input",
-          name: "placeholder",
-          label: "占位文案",
-        },
+        ...defaultInputSetter,
         {
           type: "input",
           name: "defaultValue",
           label: "默认文案",
-        },
-        {
-          type: "input",
-          name: "name",
-          label: "标题文案",
         },
       ],
       dev: MaterialWrapperHoc(MaterialInput),
@@ -147,6 +137,14 @@ export const useMaterialStore = create<MaterialState>(() => {
       dev: MaterialWrapperHoc(MaterialInputNumber),
       prod: MaterialInputNumber,
       defaultProps,
+      configSetter: [
+        ...defaultInputSetter,
+        {
+          type: "inputnumber",
+          name: "defaultValue",
+          label: "默认值",
+        },
+      ],
     },
     {
       code: "select",
@@ -156,6 +154,7 @@ export const useMaterialStore = create<MaterialState>(() => {
       dev: MaterialWrapperHoc(MaterialSelect),
       prod: MaterialSelect,
       defaultProps,
+      configSetter: [...defaultInputSetter],
     },
     {
       code: "multiSelect",
@@ -165,6 +164,7 @@ export const useMaterialStore = create<MaterialState>(() => {
       defaultProps,
       dev: MaterialWrapperHoc(MaterialMultiSelect),
       prod: MaterialMultiSelect,
+      configSetter: [...defaultInputSetter],
     },
     // {
     //   code: "upload",
@@ -181,6 +181,7 @@ export const useMaterialStore = create<MaterialState>(() => {
       defaultProps,
       dev: MaterialWrapperHoc(MaterialDatePicker),
       prod: MaterialDatePicker,
+      configSetter: [...defaultInputSetter],
     },
   ];
 

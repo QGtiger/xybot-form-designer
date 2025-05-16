@@ -25,11 +25,12 @@ export default function MaterialWrapper(
     swapFormItem,
   } = useSchemaStore();
   const ref = useRef<HTMLDivElement>(null);
+
   const [{ isOver }, drop] = useDrop({
     accept: materialKeys,
     drop(item: ItemType, monitor) {
       if (!ref.current || item.id === props.id) return;
-
+      // 防止重复触发
       if (monitor.didDrop()) {
         return;
       }
@@ -48,6 +49,8 @@ export default function MaterialWrapper(
       const hoverBoundingRect = ref.current.getBoundingClientRect();
       const hoverThreshold =
         (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      // 计算鼠标悬停位置
+      // 通过 monitor.getClientOffset() 获取鼠标位置
       const clientOffset = monitor.getClientOffset();
       const hoverClientY = clientOffset!.y - hoverBoundingRect.top;
 
@@ -70,10 +73,13 @@ export default function MaterialWrapper(
 
   const [, drag] = useDrag({
     type: props.code,
-    item: {
-      dragType: "move",
-      id: props.id,
-      code: props.code,
+    item: (monitor) => {
+      console.log("drag", monitor);
+      return {
+        dragType: "move",
+        id: props.id,
+        code: props.code,
+      };
     },
     collect(monitor) {
       return {
@@ -92,7 +98,12 @@ export default function MaterialWrapper(
   }, [isOver, setOverComponentId, props.id]);
 
   return (
-    <div ref={ref} data-component-id={props.id} className=" cursor-pointer">
+    <div
+      ref={ref}
+      data-component-id={props.id}
+      className=" cursor-pointer"
+      onMouseDownCapture={(e) => e.stopPropagation()}
+    >
       {props.children}
     </div>
   );

@@ -2,9 +2,7 @@ interface Setter {
   type: string;
   name: string;
   label: string;
-  // 先不整
-  desc?: string;
-  props?: Record<string, any>;
+  componentProps?: Record<string, any>;
 }
 
 interface MaterialItem {

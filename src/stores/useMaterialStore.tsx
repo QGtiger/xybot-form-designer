@@ -102,7 +102,7 @@ export const useMaterialStore = create<MaterialState>(() => {
       },
       configSetter: [
         {
-          type: "input",
+          type: "ricktext",
           name: "text",
           label: "副标题文案",
         },

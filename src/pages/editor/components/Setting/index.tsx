@@ -1,6 +1,7 @@
 import { useMaterialStore } from "@/stores/useMaterialStore";
 import { useSchemaStore } from "@/stores/useSchemaStore";
 import { Form, Input, InputNumber } from "antd";
+import RichEditorBtn from "./RichEditorBtn";
 
 function renderFormElememt(setter: Setter) {
   const { type, componentProps } = setter;
@@ -16,6 +17,8 @@ function renderFormElememt(setter: Setter) {
         variant="filled"
       />
     );
+  } else if (type === "ricktext") {
+    return <RichEditorBtn />;
   }
 }
 

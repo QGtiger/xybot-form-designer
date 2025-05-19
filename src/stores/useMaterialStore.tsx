@@ -71,6 +71,13 @@ export const useMaterialStore = create<MaterialState>(() => {
       },
       dev: MaterialWrapperHoc(Banner),
       prod: Banner,
+      configSetter: [
+        {
+          type: "bgselector",
+          name: "background",
+          label: "背景外观",
+        },
+      ],
     },
     {
       code: "title",

@@ -32,7 +32,7 @@ export function FormItemLabelHoc(
     return (
       <div className="flex flex-col gap-2">
         {props.name && (
-          <div className="label">
+          <div className="label font-semibold">
             <Typography.Text>{props.name}</Typography.Text>
           </div>
         )}

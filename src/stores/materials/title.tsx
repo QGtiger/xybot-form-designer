@@ -4,7 +4,7 @@ export default function Title(
   }>
 ) {
   return (
-    <div className=" line-clamp-1 text-center text-xl font-semibold my-6">
+    <div className=" line-clamp-1 text-center text-xl font-semibold">
       {props.text}
     </div>
   );

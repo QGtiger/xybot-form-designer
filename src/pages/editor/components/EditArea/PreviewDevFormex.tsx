@@ -86,10 +86,12 @@ export default function PreviewDevFormex() {
     });
   }
 
+  // md:bg-gradient-to-b md:from-indigo-200 md:via-cyan-50 md:to-white
+
   return (
     <div
       onClick={handleClick}
-      className="edit-area relative w-full min-h-full bg-white md:bg-gradient-to-b md:from-indigo-200 md:via-cyan-50 md:to-white  rounded-xl"
+      className="edit-area relative w-full min-h-full bg-white   rounded-xl"
     >
       <div className={classNames("")} ref={formexDomRef}>
         {renderComponents(formItems)}

@@ -50,10 +50,8 @@ export default function FormexDesigner(props: {
               <Allotment.Pane className="bg-[#e5e8ec]">
                 <EditArea />
               </Allotment.Pane>
-              <Allotment.Pane preferredSize={300} maxSize={450} minSize={260}>
-                <div className="p-4 px-6">
-                  <Setting key={selectedComponentId} />
-                </div>
+              <Allotment.Pane preferredSize={340} maxSize={450} minSize={300}>
+                <Setting key={selectedComponentId} />
               </Allotment.Pane>
             </Allotment>
           </div>

@@ -1,7 +1,8 @@
 import { useMaterialStore } from "@/stores/useMaterialStore";
 import { useSchemaStore } from "@/stores/useSchemaStore";
-import { Form, Input, InputNumber } from "antd";
+import { Empty, Form, Input, InputNumber } from "antd";
 import RichEditorBtn from "./RichEditorBtn";
+import BgSelector from "./components/bgSelector";
 
 function renderFormElememt(setter: Setter) {
   const { type, componentProps } = setter;
@@ -19,6 +20,8 @@ function renderFormElememt(setter: Setter) {
     );
   } else if (type === "ricktext") {
     return <RichEditorBtn />;
+  } else if (type === "bgselector") {
+    return <BgSelector />;
   }
 }
 
@@ -42,26 +45,32 @@ export default function Setting() {
   const { props } = formexItem;
   const { defaultProps, configSetter } = materialItem;
   if (!configSetter) {
-    return <div>没有配置项</div>;
+    return (
+      <div className="p-4 px-6 flex items-center justify-center h-full">
+        <Empty description="没有配置项" />
+      </div>
+    );
   }
   return (
-    <Form
-      layout="vertical"
-      initialValues={{
-        ...defaultProps,
-        ...props,
-      }}
-      onValuesChange={(changeValues) => {
-        updateFormexItemByComponentId(selectedComponentId, changeValues);
-      }}
-    >
-      {configSetter.map((it) => {
-        return (
-          <Form.Item key={it.name} name={it.name} label={it.label}>
-            {renderFormElememt(it)}
-          </Form.Item>
-        );
-      })}
-    </Form>
+    <div className=" h-full overflow-auto p-4 px-6">
+      <Form
+        layout="vertical"
+        initialValues={{
+          ...defaultProps,
+          ...props,
+        }}
+        onValuesChange={(changeValues) => {
+          updateFormexItemByComponentId(selectedComponentId, changeValues);
+        }}
+      >
+        {configSetter.map((it) => {
+          return (
+            <Form.Item key={it.name} name={it.name} label={it.label}>
+              {renderFormElememt(it)}
+            </Form.Item>
+          );
+        })}
+      </Form>
+    </div>
   );
 }

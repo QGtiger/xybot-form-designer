@@ -5,7 +5,7 @@ export default function CustomForm(
   props: PropsWithChildren<MaterialItemProps>
 ) {
   return (
-    <div className="px-10 py-4">
+    <div className="px-10 pt-14 pb-20">
       <Form
         colon={false}
         layout="vertical"

@@ -21,8 +21,8 @@ function RichEditor({
   value,
   onChange,
 }: {
-  value: string;
-  onChange: (value: string) => void;
+  value?: string;
+  onChange?: (value: string) => void;
 }) {
   const editorRef = useRef<Editor>(null);
 
@@ -57,14 +57,13 @@ function RichEditor({
 }
 
 export default function RichEditorBtn(props: {
-  value: string;
-  onChange: (value: string) => void;
+  value?: string;
+  onChange?: (value: string) => void;
 }) {
-  console.log("RichEditorBtn", props);
   const { modal } = App.useApp();
 
   const showModal = () => {
-    let content = props.value;
+    let content = props.value || "";
     modal.confirm({
       icon: null,
       title: "Formex 富文本编辑器",
@@ -81,7 +80,7 @@ export default function RichEditorBtn(props: {
         </div>
       ),
       onOk() {
-        props.onChange(content);
+        props.onChange?.(content);
       },
       onCancel() {
         return new Promise<void>((resolve, reject) => {
@@ -94,7 +93,7 @@ export default function RichEditorBtn(props: {
                 okText: "保存",
                 cancelText: "不保存",
                 onOk() {
-                  props.onChange(content);
+                  props.onChange?.(content);
                 },
               })
               .then(() => {

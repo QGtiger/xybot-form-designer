@@ -3,9 +3,13 @@ import { createRoot } from "react-dom/client";
 import DndCard from "./pages/dndcard";
 import FormDesignerEditor from "./pages/editor";
 import { ConfigProvider } from "antd";
+import { SortableListDemo } from "./pages/sortableList";
+import { DndkitDemo } from "./pages/dndkitdemo";
 
 createRoot(document.getElementById("root")!).render(
   <ConfigProvider theme={{ token: { colorPrimary: "#7f70f5" } }}>
-    <FormDesignerEditor />
+    {/* <FormDesignerEditor /> */}
+    {/* <SortableListDemo /> */}
+    <DndkitDemo />
   </ConfigProvider>
 );

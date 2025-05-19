@@ -14,7 +14,7 @@ export default function CustomForm(
         }}
         {...props}
       >
-        {props.children}
+        <div className="max-w-[600px] mx-auto">{props.children}</div>
       </Form>
     </div>
   );

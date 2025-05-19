@@ -10,7 +10,7 @@ export default function EditArea() {
         {/* <div className="device rounded-2xl bg-white  border border-gray-200 shadow-md w-[375px] min-h-[667px] overflow-hidden">
           <PreviewDevFormex />
         </div> */}
-        <div className="relative bg-white shadow-2xl rounded-xl  w-[80%] flex flex-col h-full">
+        <div className="relative bg-white shadow-2xl rounded-xl  w-[800px] flex flex-col h-full">
           <div className="h flex justify-center relative bg-[#212936] p-2 flex-shrink-0 rounded-t-xl overflow-hidden">
             <div className=" absolute flex gap-1.5 left-4 top-4 z-10">
               <div className="circle rounded-full bg-[#686e77] w-3 h-3"></div>

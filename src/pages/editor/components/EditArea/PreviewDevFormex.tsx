@@ -4,6 +4,8 @@ import React, { MouseEventHandler, useEffect, useRef, useState } from "react";
 import HoverMask from "./HoverMask";
 import { useSchemaStore } from "@/stores/useSchemaStore";
 import { motion } from "framer-motion";
+import { DeleteOutlined } from "@ant-design/icons";
+import { Tooltip } from "antd";
 
 export default function PreviewDevFormex() {
   const {
@@ -13,6 +15,7 @@ export default function PreviewDevFormex() {
     setSelectedComponentId,
     getMaterialItemByComponentId,
     getFormexItemIndexByComponentId,
+    deleteFormexItemByComponentId,
   } = useSchemaStore();
   const { schema } = useSchemaStore();
   const materialMap = useMaterialMap();
@@ -95,30 +98,6 @@ export default function PreviewDevFormex() {
     >
       <div className={classNames("")} ref={formexDomRef}>
         {renderComponents(formItems)}
-        {/* {formItems.map((it) => {
-          const { code, props, id } = it;
-          const martialItem = materialMap[code];
-          if (!martialItem) return;
-          const { dev: T } = martialItem;
-          return (
-            <T
-              key={id}
-              id={id}
-              code={code}
-              {...martialItem.defaultProps}
-              {...props}
-            />
-          );
-        })} */}
-        {/* <Form
-          colon={false}
-          layout="vertical"
-          onFinish={() => {
-            console.log("submit");
-          }}
-        >
-          
-        </Form> */}
       </div>
       {/* 显示 hoverMask */}
       {hoverComponentId && (
@@ -173,22 +152,35 @@ export default function PreviewDevFormex() {
                   left: props.left - 2,
                   top: props.top - 2,
                   border: "2px solid blue",
-                  pointerEvents: "none",
                   width: props.width + 4,
                   height: props.height + 4,
                   zIndex: 12,
                   borderRadius: 2,
                   boxSizing: "border-box",
+                  pointerEvents: "none",
                 }}
               >
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
+                  className=" pointer-events-auto"
                 >
                   <div className="absolute px-2 h-[25px] bg-blue-600 text-white font-sans text-xs top-[-30px] rounded-sm overflow-hidden flex items-center justify-center">
-                    <div className="flex gap-1">
-                      <div className="">{icon}</div>
-                      <div>{name}</div>
+                    <div className="flex gap-2 items-center">
+                      <div className="flex gap-1">
+                        <div className="">{icon}</div>
+                        <div>{name}</div>
+                      </div>
+                      <div className="divider h-[12px] w-[1px] bg-white scale-x-50"></div>
+                      <Tooltip title="删除">
+                        <DeleteOutlined
+                          className="cursor-pointer"
+                          onClick={() => {
+                            deleteFormexItemByComponentId(selectedComponentId);
+                            setSelectedComponentId("");
+                          }}
+                        />
+                      </Tooltip>
                     </div>
                   </div>
                 </motion.div>

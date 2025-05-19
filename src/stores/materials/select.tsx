@@ -3,6 +3,7 @@ import { Select } from "antd";
 import { useEffect, useRef } from "react";
 
 export default function CustomSelect(props: any) {
+  const popoverRef = useRef<HTMLDivElement>(null);
   const ref = useRef<HTMLDivElement>(null);
   const [open, openAction] = useBoolean(false);
 
@@ -13,13 +14,25 @@ export default function CustomSelect(props: any) {
       if (!ele.contains(event.target as Node)) {
         openAction.setFalse();
       } else {
-        openAction.setTrue();
+        const popoverContainer = popoverRef.current;
+        if (
+          popoverContainer &&
+          popoverContainer.contains(event.target as Node)
+        ) {
+          openAction.setTrue();
+        } else {
+          openAction.toggle();
+        }
       }
     }
 
-    document.body.addEventListener("click", handleClickOutside);
+    document.body.addEventListener("click", handleClickOutside, {
+      capture: true,
+    });
     return () => {
-      document.body.removeEventListener("click", handleClickOutside);
+      document.body.removeEventListener("click", handleClickOutside, {
+        capture: true,
+      });
     };
   }, [openAction]);
 
@@ -29,8 +42,9 @@ export default function CustomSelect(props: any) {
         {...props}
         open={open}
         style={{ width: "100%" }}
-        getPopupContainer={() => ref.current as HTMLElement}
+        getPopupContainer={() => popoverRef.current as HTMLElement}
       />
+      <div ref={popoverRef}></div>
     </div>
   );
 }

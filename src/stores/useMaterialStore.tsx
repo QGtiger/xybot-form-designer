@@ -105,7 +105,7 @@ export const useMaterialStore = create<MaterialState>(() => {
       icon: <IconFont type="icon-subtitle" />,
       hidden: true,
       defaultProps: {
-        text: "表单副标题22",
+        text: "表单副标题",
       },
       configSetter: [
         {

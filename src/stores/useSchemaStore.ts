@@ -28,6 +28,8 @@ interface SchemaAction {
   updateFormexItemByComponentId: (componentId: string, values: any) => void;
 
   getFormexItemIndexByComponentId: (componentId: string) => number;
+
+  deleteFormexItemByComponentId: (componentId: string) => void;
 }
 
 export const useSchemaStore = create<SchemaState & SchemaAction>((set, get) => {
@@ -94,7 +96,7 @@ export const useSchemaStore = create<SchemaState & SchemaAction>((set, get) => {
               id: "input-1",
               code: "input",
               props: {
-                name: "111",
+                name: "表单项标题",
               },
             },
             {
@@ -206,6 +208,15 @@ export const useSchemaStore = create<SchemaState & SchemaAction>((set, get) => {
     getFormexItemIndexByComponentId(componentId) {
       const formexItems = getFormexItemsWithForm();
       return formexItems.findIndex((it) => it.id === componentId);
+    },
+
+    deleteFormexItemByComponentId(componentId) {
+      const formexItems = getFormexItemsWithForm();
+      const index = formexItems.findIndex((it) => it.id === componentId);
+      if (index !== -1) {
+        formexItems.splice(index, 1);
+        set({ ...get() });
+      }
     },
   };
 });

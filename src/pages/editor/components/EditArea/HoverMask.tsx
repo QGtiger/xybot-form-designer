@@ -73,7 +73,7 @@ export default function HoverMask({
           position: "absolute",
           left: position.left,
           top: position.top,
-          backgroundColor: "rgba(0, 0, 255, 0.1)",
+          backgroundColor: "rgba(0, 0, 255, 0.05)",
           border: "1px dashed blue",
           pointerEvents: "none",
           width: position.width,

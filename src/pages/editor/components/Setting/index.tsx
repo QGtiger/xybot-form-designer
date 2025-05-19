@@ -39,7 +39,11 @@ export default function Setting() {
   );
   const formexItem = getFormexItemByComponentId(selectedComponentId);
   if (!materialItem || !formexItem) {
-    return <div>没有选中任何组件</div>;
+    return (
+      <div className="p-4 px-6 flex items-center justify-center h-full">
+        <Empty description="请选择编辑组件" />
+      </div>
+    );
   }
 
   const { props } = formexItem;
@@ -47,7 +51,7 @@ export default function Setting() {
   if (!configSetter) {
     return (
       <div className="p-4 px-6 flex items-center justify-center h-full">
-        <Empty description="没有配置项" />
+        <Empty description="该组件 没有配置项" />
       </div>
     );
   }

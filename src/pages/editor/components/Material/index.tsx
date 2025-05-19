@@ -2,6 +2,8 @@ import { AppstoreOutlined, BarsOutlined } from "@ant-design/icons";
 import { Segmented } from "antd";
 import { useState } from "react";
 import MaterialList from "./MaterialList";
+import classNames from "classnames";
+import MaterialTree from "./MaterialTree";
 
 export default function Material() {
   const [activeKey, setActionKey] = useState<"list" | "tree">("list");
@@ -16,8 +18,19 @@ export default function Material() {
         onChange={setActionKey}
         block
       />
-      <div>
+      <div
+        className={classNames({
+          hidden: activeKey === "tree",
+        })}
+      >
         <MaterialList />
+      </div>
+      <div
+        className={classNames({
+          hidden: activeKey !== "tree",
+        })}
+      >
+        <MaterialTree />
       </div>
     </div>
   );

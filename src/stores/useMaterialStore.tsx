@@ -4,7 +4,7 @@ import {
   FormOutlined,
   NumberOutlined,
   SelectOutlined,
-  RightOutlined,
+  CloudUploadOutlined,
 } from "@ant-design/icons";
 import { DatePicker, Input, InputNumber } from "antd";
 import { create } from "zustand";
@@ -114,7 +114,7 @@ export const useMaterialStore = create<MaterialState>(() => {
       code: "submit",
       name: "提交按钮",
       desc: "表单提交按钮",
-      icon: <RightOutlined />,
+      icon: <CloudUploadOutlined />,
       hidden: true,
       defaultProps: {
         text: "提交",

@@ -37,7 +37,7 @@ export function FormItemLabelHoc(
     const { defaultValue, ...otherProps } = props;
     // 组件的默认值
     useEffect(() => {
-      props.onChange?.(defaultValue);
+      props.onChange?.(defaultValue || undefined);
     }, [defaultValue]);
     return (
       <div className="flex flex-col gap-2">

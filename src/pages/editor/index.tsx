@@ -16,13 +16,19 @@ import zhCN from "antd/locale/zh_CN";
 
 export default function FormexDesigner(props: {
   initialSchema?: FormexSchema;
+  height?: number;
+  onChange?: (schema: FormexSchema) => void;
 }) {
-  const { initialSchema } = props;
-  const { setSchema, selectedComponentId } = useSchemaStore();
+  const { initialSchema, height, onChange } = props;
+  const { setSchema, selectedComponentId, schema } = useSchemaStore();
 
   useEffect(() => {
     initialSchema && setSchema(initialSchema);
   }, []);
+
+  useEffect(() => {
+    onChange?.(schema);
+  }, [schema, onChange]);
 
   useEffect(() => {
     const ele = document.getElementById("allotment-container");
@@ -37,7 +43,12 @@ export default function FormexDesigner(props: {
     <ConfigProvider locale={zhCN}>
       <App>
         <DndProvider backend={HTML5Backend}>
-          <div className="h-[100vh] w-[100vw] flex flex-col">
+          <div
+            className="h-[100vh] w-[100%] flex flex-col"
+            style={{
+              height: height ? `${height}px` : "100vh",
+            }}
+          >
             <Header />
             <Allotment
               defaultSizes={[100]}

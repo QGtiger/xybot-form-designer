@@ -23,7 +23,6 @@ export default function MaterialWrapper(
     setOverComponentPlacement,
     insertFormItem,
     swapFormItem,
-    setSelectedComponentId,
   } = useSchemaStore();
   const ref = useRef<HTMLDivElement>(null);
 

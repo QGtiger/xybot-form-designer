@@ -1,5 +1,6 @@
 import { Form, Typography } from "antd";
 import MaterialWrapper from "./MaterialWrapper";
+import { useEffect } from "react";
 
 export function MaterialWrapperHoc(
   Component: React.FC<MaterialItemProps>
@@ -26,9 +27,17 @@ export function FormItemLabelHoc(
 ): React.FC<
   MaterialItemProps<{
     name: string;
+
+    // 组件的默认值
+    defaultValue?: any;
+    onChange?: (value: any) => void;
   }>
 > {
   return function FormItemWrappedComponent(props) {
+    // 组件的默认值
+    useEffect(() => {
+      props.onChange?.(props.defaultValue);
+    }, [props.defaultValue]);
     return (
       <div className="flex flex-col gap-2">
         {props.name && (

@@ -34,10 +34,11 @@ export function FormItemLabelHoc(
   }>
 > {
   return function FormItemWrappedComponent(props) {
+    const { defaultValue, ...otherProps } = props;
     // 组件的默认值
     useEffect(() => {
-      props.onChange?.(props.defaultValue);
-    }, [props.defaultValue]);
+      props.onChange?.(defaultValue);
+    }, [defaultValue]);
     return (
       <div className="flex flex-col gap-2">
         {props.name && (
@@ -45,7 +46,7 @@ export function FormItemLabelHoc(
             <Typography.Text>{props.name}</Typography.Text>
           </div>
         )}
-        <Component {...props} />
+        <Component {...otherProps} />
       </div>
     );
   };

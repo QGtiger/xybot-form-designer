@@ -178,7 +178,19 @@ export const useMaterialStore = create<MaterialState>(() => {
       dev: MaterialWrapperHoc(MaterialSelect),
       prod: MaterialSelect,
       defaultProps,
-      configSetter: [...defaultInputSetter],
+      configSetter: [
+        ...defaultInputSetter,
+        {
+          type: "optionseditor",
+          name: "options",
+          label: "下拉选项",
+        },
+        {
+          type: "input",
+          name: "defaultValue",
+          label: "默认值",
+        },
+      ],
     },
     {
       code: "multiSelect",
@@ -188,7 +200,14 @@ export const useMaterialStore = create<MaterialState>(() => {
       defaultProps,
       dev: MaterialWrapperHoc(MaterialMultiSelect),
       prod: MaterialMultiSelect,
-      configSetter: [...defaultInputSetter],
+      configSetter: [
+        ...defaultInputSetter,
+        {
+          type: "optionseditor",
+          name: "options",
+          label: "下拉选项",
+        },
+      ],
     },
     // {
     //   code: "upload",

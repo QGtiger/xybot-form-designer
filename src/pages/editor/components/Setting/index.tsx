@@ -3,6 +3,7 @@ import { useSchemaStore } from "@/stores/useSchemaStore";
 import { Empty, Form, Input, InputNumber } from "antd";
 import RichEditorBtn from "./RichEditorBtn";
 import BgSelector from "./components/bgSelector";
+import OptionsEditor from "./components/optionsEditor";
 
 function renderFormElememt(setter: Setter) {
   const { type, componentProps } = setter;
@@ -22,6 +23,8 @@ function renderFormElememt(setter: Setter) {
     return <RichEditorBtn />;
   } else if (type === "bgselector") {
     return <BgSelector />;
+  } else if (type === "optionseditor") {
+    return <OptionsEditor />;
   }
 }
 

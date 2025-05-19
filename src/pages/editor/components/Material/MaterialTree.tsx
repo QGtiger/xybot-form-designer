@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  CaretDownOutlined,
-  CloudOutlined,
-  DownOutlined,
-} from "@ant-design/icons";
+import { CaretDownOutlined, CloudOutlined } from "@ant-design/icons";
 import { Tree } from "antd";
 import type { TreeDataNode, TreeProps } from "antd";
 import { useSchemaStore } from "@/stores/useSchemaStore";

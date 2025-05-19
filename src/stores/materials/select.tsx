@@ -43,6 +43,7 @@ export default function CustomSelect(props: any) {
         open={open}
         style={{ width: "100%" }}
         getPopupContainer={() => popoverRef.current as HTMLElement}
+        onSelect={openAction.setFalse}
       />
       <div ref={popoverRef}></div>
     </div>

@@ -1,6 +1,8 @@
 import Editor from "@toast-ui/editor";
 import { useEffect, useRef } from "react";
 
+import "@toast-ui/editor/toastui-editor.css";
+
 import "prismjs/themes/prism.css";
 import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css";
 

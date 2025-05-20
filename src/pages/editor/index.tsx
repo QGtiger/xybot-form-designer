@@ -13,6 +13,9 @@ import { useSchemaStore } from "@/stores/useSchemaStore";
 import { App, ConfigProvider } from "antd";
 
 import zhCN from "antd/locale/zh_CN";
+import { FormexModel } from "@/stores/FormexModel";
+
+const defaultObj = {};
 
 export default function FormexDesigner(props: {
   initialSchema?: FormexSchema;
@@ -28,7 +31,7 @@ export default function FormexDesigner(props: {
 
   useEffect(() => {
     onChange?.(schema);
-  }, [schema, onChange]);
+  }, [JSON.stringify(schema), onChange]);
 
   useEffect(() => {
     const ele = document.getElementById("allotment-container");
@@ -42,31 +45,33 @@ export default function FormexDesigner(props: {
   return (
     <ConfigProvider locale={zhCN}>
       <App>
-        <DndProvider backend={HTML5Backend}>
-          <div
-            className="h-[100vh] w-[100%] flex flex-col"
-            style={{
-              height: height ? `${height}px` : "100vh",
-            }}
-          >
-            <Header />
-            <Allotment
-              defaultSizes={[100]}
-              id="allotment-container"
-              className="opacity-0"
+        <FormexModel.Provider value={defaultObj}>
+          <DndProvider backend={HTML5Backend}>
+            <div
+              className="h-[100vh] w-[100%] flex flex-col"
+              style={{
+                height: height ? `${height}px` : "100vh",
+              }}
             >
-              <Allotment.Pane preferredSize={280} maxSize={400} minSize={200}>
-                <Material />
-              </Allotment.Pane>
-              <Allotment.Pane className="bg-[#e5e8ec]">
-                <EditArea />
-              </Allotment.Pane>
-              <Allotment.Pane preferredSize={340} maxSize={450} minSize={300}>
-                <Setting key={selectedComponentId} />
-              </Allotment.Pane>
-            </Allotment>
-          </div>
-        </DndProvider>
+              <Header />
+              <Allotment
+                defaultSizes={[100]}
+                id="allotment-container"
+                className="opacity-0"
+              >
+                <Allotment.Pane preferredSize={280} maxSize={400} minSize={200}>
+                  <Material />
+                </Allotment.Pane>
+                <Allotment.Pane className="bg-[#e5e8ec]">
+                  <EditArea />
+                </Allotment.Pane>
+                <Allotment.Pane preferredSize={340} maxSize={450} minSize={300}>
+                  <Setting key={selectedComponentId} />
+                </Allotment.Pane>
+              </Allotment>
+            </div>
+          </DndProvider>
+        </FormexModel.Provider>
       </App>
     </ConfigProvider>
   );

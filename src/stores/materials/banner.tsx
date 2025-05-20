@@ -3,7 +3,7 @@ export default function Banner({
 }: MaterialItemProps & { background: string }) {
   return (
     <div
-      className="h-[240px]"
+      className="h-[180px] md:h-[240px]"
       style={{
         backgroundSize: "cover",
         backgroundPosition: "center",
